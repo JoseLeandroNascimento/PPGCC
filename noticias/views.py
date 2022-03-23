@@ -1,10 +1,10 @@
-from xml.sax.handler import property_interning_dict
-from django.http import HttpResponse, JsonResponse
+
 from django.shortcuts import redirect, render
 from noticias.models import Noticia
 from secao.models import Secao
 from usuario.models import Usuario
 from upload.models import Arquivo
+from django.contrib import messages
 
 
 
@@ -52,21 +52,29 @@ def salvar_noticia(request):
         conteudo = request.POST.get("conteudo")
         img_id = request.POST.get('img_id')
 
-        img = Arquivo.objects.get(id = img_id )
-
         print(img_id)
-        print(img.nome)
-        try:
-                              
-            usuario = Usuario.objects.get(
-            id=request.session.get('id_usuario'))
+        if(img_id == '-1'):
 
-        except:
+            messages.add_message(request, messages.WARNING,"É necessário fornecer uma imagem")
+            return redirect("/noticias/")
 
-            usuario = None
+        else:
 
-        novaNoticia = Noticia(titulo= titulo, previa = previa, conteudo=conteudo, img= img, usuario = usuario)
-        novaNoticia.save()
+            img = Arquivo.objects.get(id = img_id )
+
+            print(img_id)
+            print(img.nome)
+            try:
+                                
+                usuario = Usuario.objects.get(
+                id=request.session.get('id_usuario'))
+
+            except:
+
+                usuario = None
+
+            novaNoticia = Noticia(titulo= titulo, previa = previa, conteudo=conteudo, img= img, usuario = usuario)
+            novaNoticia.save()
 
     return redirect("/noticias/")
 
