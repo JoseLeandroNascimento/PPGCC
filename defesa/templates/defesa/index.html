@@ -1,0 +1,167 @@
+{% extends "base.html" %} {% block menu-defesa %}
+<li class="nav-item active">
+    <a href="/defesa/" class="nav-link">
+
+
+        <i class="fas fa-user-graduate"></i>
+        <span translate="no">Defesas</span>
+
+    </a>
+
+</li>
+{% endblock %} {% block conteudo %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header mb-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col text-center">
+
+                    <a href="/cadatrarDefesa/" class="btn btn-success mt-2" href="">
+                        <i class="fas fa-plus"></i> Nova Defesa
+                    </a>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <section class="content">
+
+
+        <div class="container">
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+
+                        <div class="col-8">
+                            <h3><i class="fas fa-user-graduate"></i> Defesas</h3>
+
+                        </div>
+                        <div class="col-4 text-center">
+
+                            <form action="/busca_defesas/" method="post">
+
+
+                                {% csrf_token %}
+
+                                <input type="text" class="form-control inputValor w-75" style="display:inline;" name="valor_pesquisa" placeholder="Pesquise aqui">
+
+
+                                <button class="btn btn-primary mb-1" style="display:inline;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+                    <table class="table">
+
+                        <thead>
+                            <th class="text-center">Titulo</th>
+                            <th class="text-center">Local</th>
+                            <th class="text-center">Data/Hora</th>
+                            <th class="text-center">Usuário</th>
+                            <th class="text-center">Operações</th>
+                        </thead>
+
+                        <tbody id="myTable">
+
+                            {% for defesa in defesas %}
+
+                            <tr>
+
+                                <td class="text-center">
+
+                                    {{ defesa.titulo }}
+                                </td class="text-center">
+                                <td>
+
+                                    {{ defesa.local }}
+                                </td>
+                                <td>
+
+                                    <i class="far fa-calendar-alt" translate="no"> {{ defesa.horario|date:'d/m/Y' }} </i>
+                                    <br>
+                                    <i class="far fa-clock" translate="no"> {{ defesa.horario|date:'H:i' }} </i>
+                                </td>
+                                <td class="text-center">
+                                    fulano
+                                </td>
+                                <td class="text-center">
+
+                                    <form action="/editarDefesa/" method="post" style="display:inline;">
+
+                                        {% csrf_token %}
+                                        <input type="hidden" name="defesa_id" value="{{ defesa.id }}">
+                                        <button class="btn btn-primary">
+                                            <i class="nav-icon fas fa-edit"></i>
+                                            Editar
+                                        </button>
+
+                                    </form>
+
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluir{{ defesa.id }}">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                            Excluir
+                                    </button>
+                                    <div class="modal" id="excluir{{ defesa.id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Excluir Defesa</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    <p style="font-size: 20px">
+                                                        Tem certeza que deseja excluir esta defesa?
+                                                    </p>
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+
+                                                    <form action="/excluirDefesa/" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="id_defesa" value="{{ defesa.id }}">
+
+                                                        <button class="btn btn-success">Sim</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </section>
+</div>
+
+{% endblock %}

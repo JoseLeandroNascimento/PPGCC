@@ -1,0 +1,38 @@
+.campo-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.label-btn {
+    font-size: 30px;
+}
+
+.label-btn:hover {
+    font-size: 40px;
+}
+
+.are-btn-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+}
+
+.are-btn-remove {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+}
+
+.btn-add {
+    text-decoration: none;
+}
+
+.btn1:hove {
+    font-size: 40px
+}

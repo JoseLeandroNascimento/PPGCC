@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+
+<!-- Marca o menu upload -->
+{% block menu-home %}
+<li class="nav-item active">
+    <a href="/home/" class="nav-link">
+
+
+        <i class="fas fa-home"></i>
+        <span translate="no">Home</span>
+
+    </a>
+
+</li>
+{% endblock %}
+
+
+<!-- Bloco de conteudo aqui -->
+{% block conteudo %}
+<div class="box-main">
+
+    <div class="area-menu">
+
+        <a href="/noticias/" class="box-menu bg-primary">
+            <div class="box-label">
+
+                Notícias
+
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-newspaper icon"></i>
+            </div>
+
+        </a>
+
+        <a href="/defesa/" class="box-menu bg-warning">
+
+            <div class="box-label">
+
+                Defesas
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-user-graduate icon"></i>
+            </div>
+        </a>
+
+
+
+
+        <!-- <a href="/addDefesa/" class="box-menu bg-secondary" data-toggle="modal" data-target="#permissao">
+
+            <div class="box-label">
+                Nova Seção
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-plus-circle icon"></i>
+            </div>
+        </a> -->
+
+        <a href="/addSecao/" class="box-menu bg-secondary">
+
+            <div class="box-label">
+                Nova Seção
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-plus-circle icon"></i>
+            </div>
+        </a>
+        <a href="/upload" class="box-menu bg-info">
+
+            <div class="box-label" translate="no">
+
+                Uploads
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-upload icon"></i>
+            </div>
+        </a>
+
+
+
+        <a href="/usuario/" class="box-menu bg-success">
+            <div class="box-label">
+
+                Usuários
+            </div>
+            <div class="box-icon">
+
+                <i class="nav-icon fas fa-user-cog icon"></i>
+            </div>
+        </a>
+
+
+        <a class="box-menu bg-danger" data-toggle="modal" data-target="#sair">
+            <div class="box-label">
+
+                Sair
+            </div>
+            <div class="box-icon icon">
+
+                <i class="nav-icon fas fa-reply icon"></i>
+            </div>
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

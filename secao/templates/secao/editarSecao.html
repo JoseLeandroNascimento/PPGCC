@@ -1,0 +1,246 @@
+{% extends "base.html" %} {% load auxiliares %} {% block conteudo %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6 text-right">
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+
+    <section class="content">
+
+
+        <div class="container">
+
+
+            <div class="card">
+                <div class="card-header">
+
+
+                    <h3> <i class="nav-icon fas fa-plus-circle icon-menu"></i> Editar Seção</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form action="/updateSecao/" method="post">
+
+                        {% csrf_token %}
+                        <input type="hidden" name="id_secao" value="{{secao.id}}">
+                        <div class="row p-0 mb-3">
+                            <div class="col-8">
+                                <label for="titulo">Titulo</label>
+                                <input type="text" maxlength="30" name="titulo" autocomplete="off" id="titulo" class="form-control" placeholder="ex: Introdução" value="{{ secao.titulo }}" required>
+
+                            </div>
+                            <div class="col-4">
+
+
+                                <label for="ordem">Ordem</label>
+                                <select name="ordem" id="ordem" class="form-control">
+
+                                    
+                                    {% for ordem in ordens %}
+
+                                        {%  if secao.ordem == ordem %}
+                                            
+                                     
+                                            <option value="{{ ordem }}" selected>{{ordem}}</option>  
+
+                                        
+                                        {% else %}
+                                            
+                                            <option value="{{ ordem }}">{{ordem}}</option>
+
+                                        {% endif %}
+                                        
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col">
+
+                                <label for="icon">Ícone da Seção</label>
+                            </div>
+                            <div class="col text-center">
+
+                                <label>Visibilidade da Página</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-3">
+
+                                <select name="icon" id="icon" class="form-control mb-3" size="7" onchange="pegarIcon(this)" selected="1">
+
+                                    {% for icon in iconsKeys %}
+
+                                        {% if icon == 'Android' %}
+                                            <option value="{{ icon|getValor:icons}}" selected> {{ icon }} </option>
+                                        {% else %}
+                                            <option value="{{ icon|getValor:icons}}"> {{ icon }} </option>
+                                        {% endif %}
+                                   {% endfor %}
+                                </select>
+
+                            </div>
+                            <div class="col-5">
+
+                                <p style="display: inline;">
+                                    <i class="nav-icon fas fa-plus-circle icon-menu" style='font-size:30px;'></i>
+
+                                </p>
+                            </div>
+                            <div class="col pl-3">
+                                {% if ativada == 1 %}
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="1" class="form-check-input" name="ativada" checked>Ativada
+                                    </label>
+                                </div>
+                                <div class="form-check mb-4">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="0" class="form-check-input" name="ativada">Desativada
+                                    </label>
+                                </div>
+
+                                {% else %}
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="1" class="form-check-input" name="ativada">Ativada
+                                    </label>
+                                </div>
+                                <div class="form-check mb-4">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="0" class="form-check-input" name="ativada" checked>Desativada
+                                    </label>
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="id_usuario" value="1">
+                        <div class="text-center">
+
+                            <button type="submit" class="btn btn-success mt-3">
+                                <i class="fas fa-save"></i>
+                                Salvar
+                            </button>
+
+
+                            <input type="hidden" name="id" value="{{secao.id}}">
+                            <button type="button" class="btn btn-danger mt-3" data-toggle="modal" data-target="#modalDelete{{ secao.id }}">
+                                    <i class="fas fa-trash-alt"></i> Excluir
+                                </button>
+
+                    </form>
+
+                    </div>
+
+                    </form>
+
+                    <div class="modal" id="modalDelete{{ secao.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Confirmação de exclusão</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p style="font-size: 20px;">
+                                        Deseja excluir essa Seção e todas as suas Subseções?
+                                    </p>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+
+                                    <form action="/excluirSecao/" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ secao.id }}"> <button class="btn btn-success">Sim</button>
+                                    </form>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </section>
+
+
+    <script>
+        const inputTitulo = document.querySelector('#titulo');
+        const label = document.querySelector('#label-icon');
+        const icon = document.querySelectorAll('.icon-menu');
+
+        let titulo = '';
+        inputTitulo.addEventListener('input', (event) => {
+
+
+            label.innerHTML = inputTitulo.value;
+
+        });
+
+        function pegarIcon(ele) {
+
+            console.log(ele.value)
+            let classes = (ele.value + "").split(' ');
+
+            classes.forEach((valor) => {
+
+                icon.forEach((ic) => {
+
+                    ic.classList.remove(ic.classList[1]);
+                    ic.classList.remove(ic.classList[2]);
+                    ic.classList.add(valor);
+
+                })
+
+
+            })
+
+        }
+    </script>
+
+
+    <!-- /.content -->
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block menu-defesa %}
+<li class="nav-item active">
+    <a href="/defesa/" class="nav-link">
+
+
+        <i class="fas fa-user-graduate"></i>
+        <span translate="no">Defesas</span>
+
+    </a>
+
+</li>
+{% endblock %}
+
+{% block conteudo %}
+<section class="content">
+
+
+    <div class="container">
+
+
+        <div class="card mb-3">
+            <div class="card-header">
+
+                <h3>Nova Defesa</h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form action="/salvarDefesa/" method="POST" class="text-left">
+
+                    {% csrf_token %}
+                    <label>Título</label>
+                    <input type="text" name="titulo" class="form-control" placeholder="Digite o título" required>
+                    <br>
+                    <label>Local</label>
+                    <input type="text" name="local" class="form-control" placeholder="Digite o local" required>
+                    <br>
+                    <label>Data e hora</label>
+                    <input type="datetime-local" name="horario" class="form-control" required>
+                    <br>
+                    <label>Conteúdo</label>
+                    <textarea name="conteudo" class="conteudo" placeholder="Escreva o conteúdo aqui"></textarea>
+
+                    <input type="hidden" name="id_usuario" value="<?= $usuario_logado['id'] ?>">
+
+                    <input type="hidden" name="url_destino" value="../pages/admin/defesas.php">
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-success">
+                            <i class="nav-icon fas fa-save"></i>
+                            Salvar
+                        </button>
+                        <a href="/defesa/" class="btn btn-danger">
+                            <i class="fas fa-ban"></i>
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</section>
+
+{% endblock %}

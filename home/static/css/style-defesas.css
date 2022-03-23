@@ -1,0 +1,128 @@
+.container-defesas {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    width: 100%;
+    min-height: 400px;
+    /* height: 400px; */
+    background: rgb(216, 215, 215);
+    margin-bottom: 40px;
+    border-radius: 5px;
+}
+
+.container-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin-top: 30px;
+    height: 100px;
+    border-bottom: 1px solid rgb(114, 113, 113);
+}
+
+.container-body {
+    width: 80%;
+    display: flex;
+    justify-content: left;
+    overflow: auto;
+}
+
+.container-body::-webkit-scrollbar {
+    width: 0px;
+}
+
+.dia {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 80px;
+    margin: 0px 20px;
+}
+
+.controle-dias {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+
+.container-dias {
+    display: flex;
+    flex-direction: row;
+}
+
+.hoje {
+    background: rgb(30, 124, 30);
+    color: white;
+}
+
+.box-defesa {
+    position: relative;
+    color: rgb(66, 66, 66);
+    text-decoration-style: none;
+    min-width: 250px;
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    padding: 10px;
+    width: 30%;
+    height: 230px;
+    margin-top: 10px;
+    background: rgb(216, 215, 215);
+    box-shadow: 2px 4px 4px rgb(141, 138, 138);
+    border: 1px solid rgba(110, 106, 106, 0.1);
+    border-radius: 5px;
+    max-width: 250px;
+}
+
+.box-defesa:hover {
+    text-decoration: none;
+    background: rgb(170, 170, 170);
+    color: rgb(0, 0, 0);
+    transform: translateY(-6px);
+}
+
+.box-info {
+    position: absolute;
+    bottom: 10px;
+    height: 20%;
+    font-size: 14px;
+}
+
+.texto-titulo {
+    font-size: 90%;
+}
+
+.box-defesa:active {
+    text-decoration: none
+}
+
+.box-header {
+    height: 75%;
+}
+
+.container-btn-mostra-mais {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+@media (max-width: 1000px) {
+    .container-body {
+        width: 90%;
+        justify-content: left;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .box-defesa {
+        min-width: 200px;
+        height: 300px;
+    }
+}

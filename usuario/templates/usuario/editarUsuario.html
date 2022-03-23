@@ -1,0 +1,244 @@
+{% extends 'base.html' %} {% load static %} {% block menu-usuario %}
+<li class="nav-item active">
+    <a class="nav-link" href="/usuario/">
+
+
+        <i class="fas fa-user-cog"></i>
+        <span translate="no">Usuários</span>
+
+    </a>
+</li>
+{% endblock %} {% block conteudo %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6 text-right">
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+
+    <section class="content">
+
+        <div class="container">
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+
+                            <h3>Cadastrar Usuário</h3>
+                        </div>
+                        <div class="col text-right">
+                            <button class="btn btn-success">Redefinir senha</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <form action="/updateUsuario/" method="POST" class="form1">
+
+                        {% csrf_token %}
+                        <input type="hidden" name="id_usuario" value="{{usuario.id}}">
+                        <label>Usuário</label>
+                        <input type="text" placeholder="Login do Usuário" value="{{ usuario.usuario }}" name="usuario" class="form-control usuario">
+
+                        <div class="lista-oculta">
+
+
+                        </div>
+
+                        <hr>
+                        <div class="row w-50">
+
+                            <div class="col pl-3">
+                                <label>Tipo de usuário</label> {% if usuario.permissao == 1 %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                            <input type="radio" name="tipo_usuario" value="1" class="form-check-input" checked>Admin
+
+                                        </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+
+                                            <input type="radio" name="tipo_usuario" value="2" class="form-check-input"> Super-Admin
+
+                                        </label>
+                                </div>
+                                {% else %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                            <input type="radio" name="tipo_usuario" value="1" class="form-check-input">Admin
+
+                                        </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+
+                                            <input type="radio" name="tipo_usuario" value="2" class="form-check-input" checked> Super-Admin
+
+                                        </label>
+                                </div>
+
+                                {% endif %}
+                            </div>
+
+                            <div class="col pl-3">
+                                <label>Status</label> {% if usuario.ativado %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" name="status" value="1" class="form-check-input" checked>Ativado
+
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+
+                                        <input type="radio" name="status" value="0" class="form-check-input"> Desativado
+
+                                    </label>
+                                </div>
+                                {% else %}
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" name="status" value="1" class="form-check-input">Ativado
+
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <label class="form-check-label">
+
+                                        <input type="radio" name="status" value="0" class="form-check-input" checked> Desativado
+
+                                    </label>
+                                </div>
+
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <hr>
+
+                        <label>Configurar Permissões</label>
+
+
+                        <div class="row border pb-1 w-100">
+                            <div class="col-5">
+                                <label>Seções</label>
+                                <select id="caixa-secoes" class="form-control w-100" size="10" multiple>
+
+                                    {% for secao in secoes %}
+
+                                        <option class="border mb-2 border-left-0 border-right-0" value="{{secao.id}}">{{secao.titulo}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <div class="col-2 campo-btn">
+
+                                <div class="are-btn-add">
+                                    <a href="" title="Adicionar permissão" class="btn-add"><i class="fas fa-plus-circle label-btn btn1 text-success"></i></a>
+
+                                </div>
+
+                                <div class="are-btn-remove">
+                                    <a href="" title="Remover permissão" class="btn-remove"><i class="fas fa-times-circle label-btn btn2 text-danger"></i></a>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-5">
+
+                                <label>Permissões</label>
+                                <select id="caixa-permissoes" name="secoes" class="form-control w-100" size="10" multiple>
+                                    {% for secao in secoes_permitidas %}
+
+                                        <option class="border mb-2 border-left-0 border-right-0" value="{{secao.id}}">{{secao.titulo}}</option>
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="alert alert-success alert-dismissible sucesso w-100" style="display: none">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Sucesso!</strong> Usuario criado com sucesso.
+                            </div>
+
+
+                            <div class="alert alert-danger alert-dismissible erro w-100" style="display: none">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Erro!</strong> As senhas não coincidem.
+                            </div>
+
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button class="btn btn-success btn-salvar1">
+                                <i class="nav-icon fas fa-save"></i>
+                                Salvar
+                            </button>
+
+                            <a href="/usuario/" class="btn btn-danger">
+                                <i class="fas fa-ban"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+
+                    <script>
+                        let ele = document.querySelector(".erro");
+                        let senha1 = document.querySelector('.senha1');
+                        let senha2 = document.querySelector('.senha2');
+                        let form = document.querySelector('.form');
+
+                        if (senha1.value != senha2.value) {
+
+                            form.preventDefault();
+                            ele.style.display = 'block';
+
+                        }
+                    </script>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+    <script src="{% static 'js/caixaSelecao.js' %}"></script>
+    <script>
+        listar();
+    </script>
+
+    <!-- /.content -->
+</div>
+{% endblock %}

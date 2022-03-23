@@ -1,0 +1,121 @@
+.noticias {
+    width: 100%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.noticia {
+    display: flex;
+    width: 100%;
+    height: 150px;
+    margin: 5px;
+    padding-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+    border-bottom: 1px solid rgb(168, 168, 168);
+}
+
+.noticia:hover {
+    background-color: rgb(226, 226, 226);
+    border-radius: 5px 5px 0px 0px
+}
+
+.box-info {
+    display: flex;
+    /* background: linear-gradient(#0080FF, #5abcff); */
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgb(168, 168, 168);
+    padding-left: 1%;
+    width: 10%;
+    border-right: 1px solid rgb(168, 168, 168);
+    min-width: 130px;
+    margin-right: 15px;
+    font-size: 14px;
+    /* min-width: 160px; */
+    color: #2969bd;
+    height: 90%;
+    /* background: blue; */
+}
+
+.noticia-titulo {
+    display: flex;
+    align-items: center;
+    margin-top: 5%;
+    margin-bottom: 3%;
+    border-bottom: 1px solid #aaa;
+}
+
+.box-info p {
+    margin: 0;
+}
+
+.box-conteudo {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    /* background: #eee; */
+}
+
+.container-img {
+    overflow-y: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    min-width: 200px;
+    height: 100%;
+    /* background: orange; */
+}
+
+.container-titulo {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 18px;
+    overflow: hidden;
+    color: rgb(66, 66, 66);
+}
+
+.link-titulo-noticia {
+    color: rgb(19, 18, 18);
+}
+
+.link-titulo-noticia:hover {
+    color: rgb(19, 18, 18);
+    text-decoration: none;
+}
+
+.img-noticia {
+    width: 90%;
+    height: auto;
+    border-radius: 3px;
+}
+
+@media all and (max-width: 480px) {
+    .container-img {
+        display: none;
+    }
+    .box-info {
+        min-width: 90px;
+        margin-right: 0px;
+    }
+    .box-info p {
+        font-size: 12px;
+    }
+    .noticia {
+        width: 100%;
+        height: 100px;
+    }
+    .container-titulo {
+        font-size: 14px;
+    }
+}

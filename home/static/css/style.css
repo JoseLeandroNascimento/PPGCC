@@ -1,0 +1,347 @@
+body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border: none;
+    margin: 0;
+    background: rgb(246, 245, 245);
+    font-family: "Raleway", "Open Sans", "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.caixa-menu-suspenso {
+    background: #fafafa;
+}
+
+.opcao-menu {
+    background: #fafafa;
+    border-bottom: 1px solid #ddd;
+}
+
+.opcao-menu:hover {
+    background: #e4e3e3;
+    border-bottom: 1px solid #eee;
+}
+
+.link-voltar {
+    text-decoration: none;
+}
+
+.input-usuario {
+    background: url(../img/email-icon.png) no-repeat;
+    background-size: 25px;
+    background-position-y: center;
+    background-position-x: 4px;
+    padding-left: 35px;
+}
+
+.input-senha {
+    background: url(../img/cadeado-icon.png) no-repeat;
+    background-size: 25px;
+    background-position-y: center;
+    background-position-x: 4px;
+    padding-left: 35px;
+}
+
+.link-voltar:hover {
+    text-decoration: none;
+}
+
+.logo {
+    width: auto;
+    height: 120px;
+}
+
+.titulo-cabecalho {
+    font-size: 28px;
+}
+
+.area-voltar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.fundo-cabecalho {
+    height: 120px;
+    background: url('../img/FundoPPGCC/11.png');
+}
+
+.body-login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(226, 226, 226);
+    align-items: center;
+}
+
+.area {
+    height: 90%;
+    position: relative;
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px rgb(117, 114, 114);
+}
+
+.formulario-login {
+    width: 80%;
+}
+
+.area-logo {
+    border-radius: 10px 0px 0px 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    background-color: #0F4098;
+}
+
+.area-login {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+}
+
+.area-btn-voltar {
+    position: absolute;
+    top: 10px;
+    left: 10px
+}
+
+#img-logo-login {
+    width: 150px;
+    height: auto;
+}
+
+.menu-lateral-hover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-left: 10px solid #fafafa;
+    display: inline-block;
+    left: 0px;
+    top: 0px
+}
+
+.subsecao-ativada {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-left: 10px solid #2969BD;
+    display: inline-block;
+    left: 0px;
+    top: 0px
+}
+
+.menu-lateral-hover:hover {
+    border-left: 10px solid #8dbcf8;
+}
+
+.menu-ativado {
+    border-bottom: 2px solid #fff;
+    padding-bottom: 2px;
+}
+
+.menu-hover {
+    border-bottom: 2px solid #2969BD;
+    padding-bottom: 2px;
+}
+
+.menu-hover:hover {
+    border-bottom: 2px solid rgb(182, 182, 182);
+}
+
+.login-admin:hover {
+    text-decoration: none;
+}
+
+.login-admin {
+    text-decoration: none;
+}
+
+.caixa-menu-lateral {
+    background: #fafafa;
+}
+
+
+/* ########################### Style Rodapé ############################# */
+
+.rodape {
+    margin-top: 17%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 45%;
+    background-color: #0F4098;
+    color: #aaa;
+    box-sizing: boder-box;
+}
+
+.img-rodape {
+    top: 0px;
+    height: 90%;
+    width: auto;
+}
+
+.rodape-img {
+    /* background-color: blue; */
+    box-sizing: boder-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    height: 30%;
+}
+
+
+/* ###########################Style do menu ############################## */
+
+.div-menu::-webkit-scrollbar {
+    height: 5px;
+    border-radius: 5px;
+    background: #eee;
+}
+
+.div-menu::-webkit-scrollbar-thumb {
+    background: #2e9dd8;
+}
+
+.div-menu {
+    font-family: Helvetica;
+    font-size: 18px;
+    /* overflow-x: auto;
+    overflow-y: hidden; */
+    white-space: nowrap;
+}
+
+.texto-menu {
+    font-size: 16px;
+}
+
+
+/* ###########################Fim do menu ############################## */
+
+.rodape-img a {
+    top: 0px;
+    height: 90%;
+    width: auto;
+}
+
+.rodape-info {
+    box-sizing: boder-box;
+    padding-top: 5px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    height: 40%;
+    text-align: center;
+    /* background-color: red; */
+    font-size: 14px;
+}
+
+.rodape-contatos {
+    box-sizing: boder-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 10%;
+    /* background-color: yellow; */
+    /* position: absolute; */
+    bottom: 30px;
+    font-size: 12px;
+}
+
+.rodape-contatos a {
+    display: inline;
+    color: #aaa;
+}
+
+
+/* ########################### Style Rodapé FIM ############################# */
+
+@media (max-width: 1100px) {
+    #frame-grande {
+        display: none;
+    }
+    .container-body {
+        overflow-x: auto;
+    }
+}
+
+@media (min-width: 1101px) {
+    #frame-pequeno {
+        display: none;
+    }
+}
+
+@media (max-width: 1090px) {
+    .area {
+        height: 90%;
+        position: relative;
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        box-shadow: 2px 4px 5px rgb(117, 114, 114);
+    }
+    #img-user {
+        margin-bottom: 20px;
+    }
+    .formulario-login {
+        width: 80%;
+    }
+    .area-logo {
+        border-radius: 10px 10px 0px 0px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 20%;
+        background-color: blue;
+    }
+    .area-login {
+        border-radius: 0px 0px 10px 10px;
+        border-bottom-right-radius: 10px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        width: 100%;
+        height: 100%;
+    }
+    #img-logo-login {
+        width: 60px;
+        height: auto;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .rodape-contatos {
+        /* background: yellow; */
+        height: 10%;
+        display: block;
+        margin-top: 30px;
+        font-size: 9px;
+    }
+    .rodape-info {
+        font-size: 12px;
+    }
+    table {
+        overflow-x: visible;
+    }
+}

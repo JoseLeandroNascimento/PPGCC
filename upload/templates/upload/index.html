@@ -1,0 +1,395 @@
+{% extends "base.html" %}
+
+
+<!-- Marca o menu upload -->
+{% block menu-upload %}
+<li class="nav-item active">
+    <a href="/upload" class="nav-link">
+
+
+        <i class="fas fa-upload"></i>
+        <span translate="no">Uploads </span>
+
+    </a>
+
+</li>
+{% endblock %}
+<!-- Conteudo -->
+{% block conteudo %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3> <i class="nav-icon fas fa-upload"></i> Uploads</h3>
+
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-5">
+
+                    <form method="post" action="/salvar_arquivo/" enctype="multipart/form-data" id="form">
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-8">
+                                <div class="custom-file">
+                                    <input type="file" name="arquivo" class="form-control pt-1 text-center custom-file-input " id="file" />
+                                    <label class="custom-file-label" for="customFile">Upload de arquivo</label>
+                                </div>
+                                <input type="hidden" name="id_usuario" value="">
+
+                            </div>
+                            <div class="col-4">
+
+                                <button type="submit" class="btn btn-primary" id="btn-enviar">
+                                    <i class="fas fa-upload"></i>
+                                    Enviar
+                                </button>
+
+
+
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+                <div class="col-7">
+                    <div class="row">
+
+                        <div class="col-4 text-right">
+                            <div class="dropdown">
+
+                            </div>
+
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <form action="/buscar_arquivo/" method="post">
+
+
+                                        {% csrf_token %}
+
+                                        <input type="text" class="form-control inputValor w-75" style="display:inline;" name="valor_pesquisa" placeholder="Digite aqui">
+
+
+                                        <button class="btn btn-primary mb-1" style="display:inline;">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+
+                                    </form>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% if isSalvo %}
+
+    <div class="alert alert-success mt-3 alert-dismissible" id="notifica-erro">
+
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Sucesso:</strong> Upload feito com sucesso!
+
+    </div>
+    {% endif %}
+
+    <div class="card mt-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-10">
+                    <h3>
+                        Arquivos
+                    </h3>
+                </div>
+                <div class="col-2">
+
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#excluirUpload"><i
+                            class="fas fa-trash"></i> Excluir tudo</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <table class="table" id="myTable">
+
+                <thead>
+                    <tr>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Usuário</th>
+                        <th class="text-center">Operações</th>
+                    </tr>
+                </thead>
+
+
+                <tbody class="arquivos-table">
+
+                    {% for arquivo in arquivos %}
+
+                    <tr>
+                        <td style="text-align: center;">
+
+                            {% if arquivo.extensao == 'jpeg' or arquivo.extensao == 'png' %}
+                            <i class="fas fa-file-image" style="font-size: 24px;"></i> {% elif arquivo.extensao == 'pdf' %}
+
+                            <i class="fas fa-file-pdf" style="font-size: 24px;"></i> {% elif arquivo.extensao == 'docx' or arquivo.extensao == 'txt' %}
+                            <i class="fas fa-file-word" style="font-size: 24px;"></i> {% endif %}
+
+                        </td>
+
+                        <td style="text-align: center;">
+
+                            {{ arquivo.nome | slice:"0:45" }}
+
+                        </td>
+
+                        <td>
+                            <i class="far fa-calendar-alt" translate="no"> {{ arquivo.data|date:'d/m/Y' }}</i>
+                            <br>
+                            <i class="far fa-clock" translate="no"> {{ arquivo.data|date:'H:i' }} </i>
+                        </td>
+                        <td style="text-align: center;"> leandro@gmail.com</td>
+                        <td style="text-align: center;">
+                            <a href="../media/{{ arquivo.url }}" title="Baixar arquivo" class="btn btn-success" download>
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-info ml-2" title="Vinculação do arquivo" data-toggle="modal" data-target="#modalUtilizado{{ arquivo.id }}">
+                                <i class="fas fa-link"></i>
+                            </button>
+
+                            <div class="modal" id="modalUtilizado{{ arquivo.id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header ">
+                                            <h4 class="modal-title"> <i class="fas fa-link"></i> Vinculações do arquivo
+                                            </h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+
+                                            <br>
+                                            <br>
+
+
+                                            <div id="accordion{{arquivo.id}}">
+
+
+                                                <div class="card">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseOne{{arquivo.id}}" style="cursor: pointer;">
+                                                        <div class="row">
+                                                            <div class="col-12">
+
+                                                                Notícias
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div id="collapseOne{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                        <div class="card-body">
+                                                            <!-- Faz um for aqui -->
+                                                            <form action="./editarNoticias.php" method="post">
+                                                                <input type="hidden" name="id" value="<?= $noticia['id'] ?>">
+                                                                <button class="btn">
+
+                                                                </button>
+
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="card">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTwo{{ arquivo.id }}" style="cursor: pointer;">
+
+                                                        <div class="row">
+                                                            <div class="col-12">
+
+                                                                Defesas
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div id="collapseTwo{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                        <div class="card-body">
+
+                                                            <form action="./editarDefesas.php" method="post">
+                                                                <input type="hidden" name="defesa_id" value="<?= $defesa['id'] ?>">
+                                                                <button class="btn">
+
+                                                                </button>
+
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTree{{ arquivo.id }}" style="cursor: pointer;">
+
+                                                        <div class="row">
+                                                            <div class="col-12">
+
+                                                                Subseções
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div id="collapseTree{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                        <div class="card-body">
+
+
+                                                            <form action="./editarSubsecao.php" method="post">
+                                                                <input type="hidden" name="subsecao" value="<?= $subsecao['id'] ?>">
+                                                                <button class="btn">
+
+                                                                </button>
+
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+
+
+
+                                            <button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <button class="btn btn-outline-danger ml-2" title="Excluir arquivo" data-toggle="modal" data-target="#modalDelete{{ arquivo.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                            <div class="modal" id="modalDelete{{ arquivo.id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header ">
+                                            <h4 class="modal-title">Excluir arquivo</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            <p style="font-size: 20px;">
+                                                Tem certeza que deseja excluir o arquivo?
+
+                                            </p>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+
+                                            <a href='{% url "upload:excluir_arquivo" id=arquivo.id %}' class="btn btn-success">Sim</a>
+
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+
+
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="excluirUpload">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmação de exclusão</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>
+                        Deseja excluir todos os arquivos?
+
+                    </p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+
+                    <form action="/excluir_tudo/" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="url" value="">
+                        <input type="hidden" name="id_usuario" value="">
+                        <button class="btn btn-success">Sim</button>
+                    </form>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- Model de -->
+
+
+{% endblock %}

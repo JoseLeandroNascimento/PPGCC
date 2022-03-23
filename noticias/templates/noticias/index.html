@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block menu-noticia %}
+<li class="nav-item active">
+    <a class="nav-link" href="/noticias/">
+
+        <i class="fas fa-newspaper"></i>
+        <span translate="no">Notícias</span>
+
+    </a>
+</li>
+{% endblock %} {% block conteudo %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="text-center w-100">
+
+                    <a class="btn btn-success mt-2" href="/add_noticia/">
+                        <i class="fas fa-plus"></i> Nova Notícia
+                    </a>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+
+        <section class="content">
+            <div class="container">
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-8">
+                                <h3><i class="nav-icon fas fa-newspaper"></i> Notícias</h3>
+                            </div>
+                            <div class="col-4">
+                                <form action="/buscar_noticia/" method="post">
+
+
+                                    {% csrf_token %}
+
+                                    <input type="text" class="form-control inputValor w-75" style="display:inline;" name="valor_pesquisa" placeholder="Pesquise aqui">
+
+
+                                    <button class="btn btn-primary mb-1" style="display:inline;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Título</th>
+                                        <th class="text-center">Usuário</th>
+                                        <th class="text-center">Data/Hora</th>
+                                        <th class="text-center">Operações</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="myTable">
+                                    {% for noticia in noticias %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ noticia.titulo }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{noticia.usuario.usuario}}
+                                        </td>
+                                        <td class="text-center">
+
+                                            <i class="far fa-calendar-alt" translate="no"> {{ noticia.data_publicacao|date:'d/m/Y' }} </i>
+                                            <br>
+                                            <i class="far fa-clock" translate="no"> {{ noticia.data_publicacao|date:'H:i' }} </i>
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="/editar_noticia/" style="display:inline;" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id_noticia" value="{{ noticia.id }}">
+                                                <button class="btn btn-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                        Editar
+                                                    </button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete{{ noticia.id }}">
+                                                    <i class="nav-icon fas fa-trash"></i>
+                                                    Excluir
+                                                </button>
+
+                                            <div class="modal" id="modalDelete{{ noticia.id }}">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+
+                                                        <!-- Modal Header -->
+                                                        <div class="modal-header ">
+                                                            <h4 class="modal-title">Excluir Notícia</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">
+                                                            <p style="font-size: 20px;">
+                                                                Tem certeza que deseja excluir a notícia?
+                                                            </p>
+                                                        </div>
+
+                                                        <!-- Modal footer -->
+                                                        <div class="modal-footer">
+
+                                                            <form action="/excluir_noticia/" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id_noticia" value="{{ noticia.id }}"> <button class="btn btn-success">Sim</button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %}

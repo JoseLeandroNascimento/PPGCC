@@ -1,0 +1,166 @@
+{% extends 'base.html' %} {% block menu-usuario %}
+<li class="nav-item active">
+    <a class="nav-link" href="/usuario/">
+
+        <i class="fas fa-user-cog"></i>
+        <span translate="no">Usuários</span>
+
+    </a>
+</li>
+{% endblock %} {% block conteudo %}
+<!-- Content Header (Page header) -->
+<div class="content-header mb-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col text-center">
+                <a href="/cadastro_usuario/" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Cadastrar Usuário
+                </a>
+            </div>
+            <!-- /.col -->
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container">
+
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-8">
+
+                        <h3><i class="nav-icon fas fa-user-cog"></i> Usuários</h3>
+                    </div>
+
+                    <div class="col-4 text-right">
+
+                        <form action="/buscar_usuario/" method="post">
+
+
+                            {% csrf_token %}
+
+                            <input type="text" class="form-control inputValor w-75" style="display:inline;" name="valor_pesquisa" placeholder="Pesquise aqui">
+
+
+                            <button class="btn btn-primary mb-1" style="display:inline;">
+                                <i class="fas fa-search"></i>
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <div class="text-center">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Permissão</th>
+                                <th>Status</th>
+                                <th>Operações</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="myTable">
+
+
+                            {% for usuario in usuarios %}
+
+
+                            <tr>
+                                <td>
+                                    {{usuario.usuario}}
+                                </td>
+                                <td>
+                                    {% if usuario.permissao == 1 %} Admin {% else %} Super Admin {% endif %}
+                                </td>
+                                <td>
+                                    {% if usuario.ativado == 1 %} Habilitado {% else %} Desabilitado {% endif %}
+                                </td>
+                                <td>
+
+                                    <form action="/editar_usuario/" method="post" style="display:inline;">
+
+                                        {% csrf_token %}
+                                        <input type="hidden" name="usuario_id" value="{{usuario.id}}">
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                                    Editar
+                                        </button>
+                                    </form>
+
+
+                                    <button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete{{usuario.id}}">
+                                        <i class="fas fa-trash"></i>
+                                        Excluir
+                                    </button>
+
+                                    <div class="modal" id="modalDelete{{usuario.id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header ">
+                                                    <h4 class="modal-title">Excluir Usuário</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    <p style="font-size: 20px;">
+                                                        Tem certeza que deseja excluir o usuário: {{usuario.usuario}}
+                                                    </p>
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+
+                                                    <form action="/excluir_usuario/" method="post">
+
+                                                        {% csrf_token %}
+
+                                                        <input type="hidden" name="id_usuario" value="{{usuario.id}}">
+                                                        <button class="btn btn-success">Sim</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+
+{% endblock %}

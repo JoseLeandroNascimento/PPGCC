@@ -1,0 +1,202 @@
+{% extends "base.html" %} {% load auxiliares %} {% block menu-secao-add %}
+<li class="nav-item active">
+    <a href="/addSecao/" class="nav-link">
+
+
+        <i class="fas fa-plus-circle"></i>
+        <span translate="no">Nova Seção</span>
+
+    </a>
+
+</li>
+
+{% endblock %}
+<!--  -->
+{% block conteudo %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6 text-right">
+
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+
+    <section class="content">
+
+
+        <div class="container">
+
+
+            <div class="card">
+                <div class="card-header">
+
+
+                    <h3> <i class="nav-icon fas fa-plus-circle icon-menu"></i> Nova Seção</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form action="/salvarSecao/" method="post">
+
+                        {% csrf_token %}
+                        <div class="row p-0 mb-3">
+                            <div class="col-8">
+                                <label for="titulo">Titulo</label>
+                                <input type="text" maxlength="30" name="titulo" autocomplete="off" id="titulo" class="form-control" placeholder="ex: Introdução" required>
+
+                            </div>
+                            <div class="col-4">
+
+
+                                <label for="ordem">Ordem</label>
+                                <select name="ordem" id="ordem" class="form-control">
+
+                                    
+                                    {% for ordem in ordens %}
+
+                                        {%  if ordens|length == ordem %}
+                                            
+                                            <option value="{{ ordem }}" selected>{{ordem}}</option>  
+                                        
+                                        {% else %}
+                                            
+                                            <option value="{{ ordem }}">{{ordem}}</option>
+
+                                        {% endif %}
+                                        
+
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col">
+
+                                <label for="icon">Ícone da Seção</label>
+                            </div>
+                            <div class="col text-center">
+
+                                <label>Visibilidade da Página</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-3">
+
+                                <select name="icon" id="icon" class="form-control mb-3" size="7" onchange="pegarIcon(this)" selected="1">
+
+                                    {% for icon in iconsKeys %}
+
+                                        {% if icon == 'Android' %}
+                                            <option value="{{ icon|getValor:icons}}" selected> {{ icon }} </option>
+                                        {% else %}
+                                            <option value="{{ icon|getValor:icons}}"> {{ icon }} </option>
+                                        {% endif %}
+                                   {% endfor %}
+                                </select>
+
+                            </div>
+                            <div class="col-5">
+
+                                <p style="display: inline;">
+                                    <i class="nav-icon fas fa-plus-circle icon-menu" style='font-size:30px;'></i>
+
+                                </p>
+                            </div>
+                            <div class="col pl-3">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="1" class="form-check-input" name="ativada" checked>Ativada
+                                    </label>
+                                </div>
+                                <div class="form-check mb-4">
+                                    <label class="form-check-label">
+                                        <input type="radio" value="0" class="form-check-input" name="ativada">Desativada
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="id_usuario" value="1">
+                        <div class="text-center">
+
+                            <button type="submit" class="btn btn-success mt-3">
+                                <i class="fas fa-plus"></i>
+                                Criar Seção
+                            </button>
+
+                            <a href="/home/" class="btn btn-danger mt-3">
+                                <i class="fas fa-ban"></i> Cancelar
+                            </a>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </section>
+
+
+    <script>
+        const inputTitulo = document.querySelector('#titulo');
+        const label = document.querySelector('#label-icon');
+        const icon = document.querySelectorAll('.icon-menu');
+
+        let titulo = '';
+        inputTitulo.addEventListener('input', (event) => {
+
+
+            label.innerHTML = inputTitulo.value;
+
+        });
+
+        function pegarIcon(ele) {
+
+            console.log(ele.value)
+            let classes = (ele.value + "").split(' ');
+
+            classes.forEach((valor) => {
+
+                icon.forEach((ic) => {
+
+                    ic.classList.remove(ic.classList[1]);
+                    ic.classList.remove(ic.classList[2]);
+                    ic.classList.add(valor);
+
+                })
+
+
+            })
+
+        }
+    </script>
+
+
+    <!-- /.content -->
+</div>
+{% endblock %}
