@@ -13,12 +13,14 @@ def addSecao(request):
 
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
     icon_secao = list(icons.values())[0]
+    icon_secao_chave = list(icons.keys())[0]
 
     return render(request, "secao/index.html", {"ordens": ordens,
                                                 "num_ordem": num_ordem,
                                                 "secoes": secoes,
                                                 "icons": icons,
                                                 "icon_secao": icon_secao,
+                                                "icon_secao_chave": icon_secao_chave,
                                                 "iconsKeys": icons.keys(),
                                                 "iconsValues": icons.values(),
                                                 "usuario_logado": usuario_logado

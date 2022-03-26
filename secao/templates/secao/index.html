@@ -106,7 +106,7 @@
 
                                     {% for icon in iconsKeys %}
 
-                                        {% if icon == 'Android' %}
+                                        {% if icon == icon_secao_chave %}
                                             <option value="{{ icon|getValor:icons}}" selected> {{ icon }} </option>
                                         {% else %}
                                             <option value="{{ icon|getValor:icons}}"> {{ icon }} </option>
