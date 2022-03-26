@@ -32,7 +32,7 @@
                 <div class="card-header">
 
 
-                    <h3> <i class="nav-icon fas fa-plus-circle icon-menu"></i> Editar Seção</h3>
+                    <h3> <i class="nav-icon {{icone_secao}} icon-menu"></i> Editar Seção</h3>
                 </div>
 
                 <div class="card-body">
@@ -91,11 +91,12 @@
 
                             <div class="col-3">
 
+
                                 <select name="icon" id="icon" class="form-control mb-3" size="7" onchange="pegarIcon(this)" selected="1">
 
                                     {% for icon in iconsKeys %}
 
-                                        {% if icon == 'Android' %}
+                                        {% if icon|getValor:icons == icone_secao %}
                                             <option value="{{ icon|getValor:icons}}" selected> {{ icon }} </option>
                                         {% else %}
                                             <option value="{{ icon|getValor:icons}}"> {{ icon }} </option>
@@ -107,7 +108,7 @@
                             <div class="col-5">
 
                                 <p style="display: inline;">
-                                    <i class="nav-icon fas fa-plus-circle icon-menu" style='font-size:30px;'></i>
+                                    <i class="nav-icon {{icone_secao}} icon-menu" style='font-size:30px;'></i>
 
                                 </p>
                             </div>

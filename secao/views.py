@@ -12,11 +12,13 @@ def addSecao(request):
     ordens = list(range(1, num_ordem+2))
 
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+    icon_secao = list(icons.values())[0]
 
     return render(request, "secao/index.html", {"ordens": ordens,
                                                 "num_ordem": num_ordem,
                                                 "secoes": secoes,
                                                 "icons": icons,
+                                                "icon_secao": icon_secao,
                                                 "iconsKeys": icons.keys(),
                                                 "iconsValues": icons.values(),
                                                 "usuario_logado": usuario_logado
@@ -68,6 +70,7 @@ def editarSecao(request, id):
                                                       "num_ordem": num_ordem,
                                                       "secoes": secoes,
                                                       "icons": icons,
+                                                      "icone_secao": secao.icon,
                                                       "iconsKeys": icons.keys(),
                                                       "iconsValues": icons.values(),
                                                       "usuario_logado": usuario_logado,
