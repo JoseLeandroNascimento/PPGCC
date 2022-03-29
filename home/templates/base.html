@@ -170,9 +170,12 @@
                         <a class="collapse-item" href='/editarSecao/{{ secao.id }}'>
                             <i class="mr-1 fas fa-cogs"></i> Configurar Seção
                         </a>
-                        <a class="collapse-item" href="cards.html">
+                        {% block cadastro_subsecao %}
+                        <a class="collapse-item" href="/subsecao-cadastro/{{secao.id}}">
                             <i class="mr-1 fas fa-plus-circle"></i> Nova Subseção
                         </a>
+
+                        {% endblock %}
                     </div>
                 </div>
             </li>

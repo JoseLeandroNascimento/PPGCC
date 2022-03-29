@@ -11,5 +11,6 @@ urlpatterns = [
     path('', include('upload.urls')),
     path('', include('noticias.urls')),
     path('',include('login.urls')),
+    path('', include('subsecao.urls'))
 
 ]
