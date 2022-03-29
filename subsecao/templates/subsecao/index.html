@@ -13,12 +13,14 @@
 
             <div class="card-body">
 
-                <form action="" method="post">
+                <form action="/subsecao-salvar/" method="post">
 
+                    {% csrf_token %}
                     <div class="row p-0 mb-3">
                         <div class="col-8">
                             <label for="titulo">Titulo</label>
-                            <input type="text" maxlength="30" name="titulo" autocomplete="off" id="titulo" class="form-control" placeholder="ex: Introdução" required>
+                            <input type="text" maxlength="30" name="titulo" autocomplete="off" id="titulo"
+                                class="form-control" placeholder="ex: Introdução" required>
 
                         </div>
                         <div class="col-4">
@@ -28,27 +30,27 @@
                             <select name="ordem" id="ordem" class="form-control">
                                 {% for ordem in cont_subsecoes %}
 
-                                    {% if ordem == max_ordem %}
+                                {% if ordem == max_ordem %}
 
-                                        <option value="{{ ordem }}" selected>
-
-
-                                            {{ ordem }}
-
-                                        </option>
-
-                                    {% else %}
+                                <option value="{{ ordem }}" selected>
 
 
-                                        <option value="{{ ordem }}" selected>
+                                    {{ ordem }}
+
+                                </option>
+
+                                {% else %}
 
 
-                                            {{ ordem }}
-
-                                        </option>
+                                <option value="{{ ordem }}" selected>
 
 
-                                    {% endif %}
+                                    {{ ordem }}
+
+                                </option>
+
+
+                                {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -66,24 +68,21 @@
                         </label>
                     </div>
 
-                    <?php
 
-                    include "./partial/modalPermissao.php";
-                    ?>
 
-                        <input type="hidden" name="url_destino" value="../pages/admin/view.php?subsecao=">
-                        <input type="hidden" name="id_usuario" value="<?= $usuario_logado['id'] ?>">
-                        <input type="hidden" name="id_secao" value="<?= $id_secao ?>">
-                        <div class="text-center">
 
-                            <button type="submit" class="btn btn-success mt-5">
+                    <input type="hidden" name="id_usuario" value="{{ usuario_logado}}">
+                    <input type="hidden" name="id_secao" value="{{id_secao}}">
+                    <div class="text-center">
+
+                        <button type="submit" class="btn btn-success mt-5">
                             <i class="fas fa-plus"></i>
                             Criar Subseção
                         </button>
-                            <a href="index.php" class="btn btn-danger mt-5">
-                                <i class="fas fa-ban"></i> Cancelar
-                            </a>
-                        </div>
+                        <a href="/home/" class="btn btn-danger mt-5">
+                            <i class="fas fa-ban"></i> Cancelar
+                        </a>
+                    </div>
 
                 </form>
             </div>

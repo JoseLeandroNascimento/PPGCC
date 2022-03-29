@@ -2,6 +2,7 @@ from xml.sax.handler import property_interning_dict
 from django.shortcuts import redirect, render
 from secao.models import Secao
 from django.db.models import Q
+from subsecao.models import Subsecao
 from usuario.models import Usuario
 from secao.models import Secao
 
@@ -12,6 +13,7 @@ def usuario(request):
 
     secoes = Secao.objects.all().order_by('ordem')
     usuarios = Usuario.objects.all()
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     try:
 
@@ -23,12 +25,13 @@ def usuario(request):
         usuario_logado = None
 
     
-    return render(request, "usuario/index.html", {"secoes": secoes, "usuarios": usuarios, 'usuario_logado': usuario_logado})
+    return render(request, "usuario/index.html", {"secoes": secoes, "usuarios": usuarios, 'usuario_logado': usuario_logado,'subsecoes':subsecoes})
 
 
 def cadastro(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     try:
 
@@ -40,7 +43,7 @@ def cadastro(request):
         usuario_logado = None
 
 
-    return render(request, "usuario/cadastro.html", {'secoes': secoes,'usuario_logado':usuario_logado})
+    return render(request, "usuario/cadastro.html", {'secoes': secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
 
 
@@ -105,6 +108,7 @@ def excluirUsuario(request):
 def buscarUsuario(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if(request.method == 'POST'):
 
@@ -121,7 +125,7 @@ def buscarUsuario(request):
 
         usuario_logado = None
 
-    return render(request, "usuario/index.html", {'usuarios': usuarios, "secoes": secoes,'usuario_logado':usuario_logado})
+    return render(request, "usuario/index.html", {'usuarios': usuarios, "secoes": secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
 
 
@@ -129,6 +133,7 @@ def buscarUsuario(request):
 def editarUsuario(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if request.method == 'POST':
 
@@ -148,7 +153,7 @@ def editarUsuario(request):
 
         usuario_logado = None
 
-    return render(request, "usuario/editarUsuario.html", {'secoes': secoes, 'usuario': usuario, "secoes_permitidas": secoes_permitidas,'usuario_logado':usuario_logado})
+    return render(request, "usuario/editarUsuario.html", {'secoes': secoes, 'usuario': usuario, "secoes_permitidas": secoes_permitidas,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
 
 

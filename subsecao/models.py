@@ -6,7 +6,7 @@ from usuario.models import Usuario
 
 class Subsecao(models.Model):
 
-    secao = models.OneToOneField(
+    secao = models.ForeignKey(
 
         Secao,
         blank=False,
@@ -27,7 +27,7 @@ class Subsecao(models.Model):
 
     ordem = models.IntegerField(unique=True)
 
-    usuarios = models.OneToOneField(
+    usuarios = models.ForeignKey(
 
         Usuario,
         on_delete=models.SET_NULL,
