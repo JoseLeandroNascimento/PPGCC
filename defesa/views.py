@@ -3,26 +3,29 @@ from django.shortcuts import redirect, render
 from django.db.models import Q
 from  defesa.models import  Defesa
 from secao.models import Secao
+from subsecao.models import Subsecao
 from usuario.models import Usuario
 
 def defesa(request):
 
     defesas = Defesa.objects.all()
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     # usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
 
     # return render(request, 'defesa/index.html',{'defesas':defesas,"secoes":secoes,'usuario_logado':usuario_logado})
-    return render(request, 'defesa/index.html',{'defesas':defesas,"secoes":secoes})
+    return render(request, 'defesa/index.html',{'defesas':defesas,"secoes":secoes,"subsecoes":subsecoes})
 
 
 def cadatroDefesa(request):
 
     secoes = Secao.objects.all().order_by('ordem')
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
-    return render(request,"defesa/cadastroDefesa.html",{"secoes":secoes,'usuario_logado':usuario_logado})
+    return render(request,"defesa/cadastroDefesa.html",{"secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})
 
 def salvarDefesa(request):
 
@@ -62,6 +65,7 @@ def excluirDefesa(request):
 def buscarDefesas(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if request.method =='POST':
 
@@ -72,13 +76,14 @@ def buscarDefesas(request):
     
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-    return render(request,'defesa/index.html',{'defesas':defesas,"secoes":secoes,'usuario_logado':usuario_logado})
+    return render(request,'defesa/index.html',{'defesas':defesas,"secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})
 
 
 def editarDefesa(request):
 
     secoes = Secao.objects.all().order_by('ordem')
-    
+    subsecoes = Subsecao.objects.all().order_by('ordem')
+
     if(request.method == 'POST'):
 
         defesa_id = request.POST.get('defesa_id')
@@ -91,7 +96,7 @@ def editarDefesa(request):
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
 
-    return render(request,"defesa/editarDefesa.html",{'defesa':defesa,"secoes":secoes,'usuario_logado':usuario_logado})
+    return render(request,"defesa/editarDefesa.html",{'defesa':defesa,"secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})
 
 
 def updateDefesa(request):

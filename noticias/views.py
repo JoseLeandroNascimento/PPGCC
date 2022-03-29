@@ -2,6 +2,7 @@
 from django.shortcuts import redirect, render
 from noticias.models import Noticia
 from secao.models import Secao
+from subsecao.models import Subsecao
 from usuario.models import Usuario
 from upload.models import Arquivo
 from django.contrib import messages
@@ -13,7 +14,8 @@ def noticias(request):
 
     secoes = Secao.objects.all().order_by('ordem')
     noticias = Noticia.objects.all()
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
     try:
 
         usuario_logado = Usuario.objects.get(
@@ -23,14 +25,15 @@ def noticias(request):
 
         usuario_logado = None
 
-    return render(request, "noticias/index.html", {"noticias": noticias, "secoes": secoes, 'usuario_logado': usuario_logado})
+    return render(request, "noticias/index.html", {"noticias": noticias, "secoes": secoes, 'usuario_logado': usuario_logado,'subsecoes':subsecoes})
 
 
 def add_noticia(request):
 
     secoes = Secao.objects.all().order_by('ordem')
     imagens = Arquivo.objects.filter(tipo_arquivo = 'imagem')
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
     try:
 
         usuario_logado = Usuario.objects.get(
@@ -40,7 +43,7 @@ def add_noticia(request):
 
         usuario_logado = None
 
-    return render(request, "noticias/add_noticia.html", {"secoes": secoes, 'usuario_logado': usuario_logado, 'imagens': imagens})
+    return render(request, "noticias/add_noticia.html", {"subsecoes":subsecoes,"secoes": secoes, 'usuario_logado': usuario_logado, 'imagens': imagens})
 
 
 def salvar_noticia(request):
@@ -92,7 +95,7 @@ def editar_noticia(request):
 
     secoes = Secao.objects.all().order_by('ordem')
     imagens = Arquivo.objects.filter(tipo_arquivo = 'imagem')
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if(request.method == "POST"):
 
@@ -109,7 +112,7 @@ def editar_noticia(request):
 
         usuario_logado = None
 
-    return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,'imagens':imagens})
+    return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,'imagens':imagens,"subsecoes":subsecoes})
 
 
 def update_noticia(request):
@@ -137,6 +140,7 @@ def update_noticia(request):
 def buscarNoticia(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if(request.method == 'POST'):
 
@@ -153,4 +157,4 @@ def buscarNoticia(request):
 
         usuario_logado = None
 
-    return render(request, "noticias/index.html", {'noticias':noticias,"secoes":secoes,'usuario_logado':usuario_logado})
+    return render(request, "noticias/index.html", {'noticias':noticias,"secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})

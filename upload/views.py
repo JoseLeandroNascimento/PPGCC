@@ -2,6 +2,7 @@ import os
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from secao.models import Secao
+from subsecao.models import Subsecao
 
 from upload.models import Arquivo
 from usuario.models import Usuario
@@ -36,6 +37,8 @@ def upload(request):
 
     arquivos = Arquivo.objects.all()
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
+
     # usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
     # return render(request,'upload/index.html',{'arquivos':arquivos,
@@ -43,7 +46,8 @@ def upload(request):
     #                                             "usuario_logado":usuario_logado  
     #                                           })
     return render(request,'upload/index.html',{'arquivos':arquivos,
-                                                "secoes":secoes
+                                                "secoes":secoes,
+                                                "subsecoes":subsecoes
                                                
                                               })
 
@@ -51,7 +55,7 @@ def upload(request):
 def salvar_arquivo(request):
 
     secoes = Secao.objects.all().order_by('ordem')
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     arquivo = str(request.FILES['arquivo'])
     arquivo = str(request.FILES['arquivo']).split('.')
@@ -94,7 +98,8 @@ def salvar_arquivo(request):
     return render(request,'upload/index.html',{'arquivos':arquivos,
                                                     'isSalvo': isSalvo,
                                                     "secoes":secoes,
-                                                    'usuario_logado':usuario_logado
+                                                    'usuario_logado':usuario_logado,
+                                                    'subsecoes':subsecoes
                                                     })
 
 
@@ -153,6 +158,7 @@ def excluir_tudo(request):
 def buscarArquivo(request):
 
     secoes = Secao.objects.all().order_by('ordem')
+    subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if(request.method == 'POST'):
 
@@ -162,6 +168,6 @@ def buscarArquivo(request):
 
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-    return render(request,"upload/index.html",{'arquivos':arquivos,"secoes":secoes,'usuario_logado':usuario_logado})
+    return render(request,"upload/index.html",{'arquivos':arquivos,"secoes":secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
 

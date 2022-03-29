@@ -1,13 +1,15 @@
 from django.shortcuts import redirect, render
 from secao.models import Secao
 from secao.icons import icons
+from subsecao.models import Subsecao
 from usuario.models import Usuario
 
 
 def addSecao(request):
 
     secoes = Secao.objects.all().order_by('ordem')
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
     num_ordem = len(secoes)
     ordens = list(range(1, num_ordem+2))
 
@@ -23,7 +25,8 @@ def addSecao(request):
                                                 "icon_secao_chave": icon_secao_chave,
                                                 "iconsKeys": icons.keys(),
                                                 "iconsValues": icons.values(),
-                                                "usuario_logado": usuario_logado
+                                                "usuario_logado": usuario_logado,
+                                                "subsecoes":subsecoes
 
                                                 })
 
@@ -60,7 +63,7 @@ def salvarSecao(request):
 def editarSecao(request, id):
 
     secoes = Secao.objects.all().order_by('ordem')
-
+    subsecoes = Subsecao.objects.all().order_by('ordem')
     num_ordem = len(secoes)
     ordens = list(range(1, num_ordem+1))
 
@@ -76,7 +79,8 @@ def editarSecao(request, id):
                                                       "iconsKeys": icons.keys(),
                                                       "iconsValues": icons.values(),
                                                       "usuario_logado": usuario_logado,
-                                                      "secao": secao
+                                                      "secao": secao,
+                                                      "subsecoes":subsecoes
                                                       })
 
 

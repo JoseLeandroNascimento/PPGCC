@@ -1,0 +1,180 @@
+{% extends "base.html" %} {% block conteudo %}
+
+<div class="content-wrapper" style="position:relative">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+
+                <div class="text-center w-100">
+                    <form action="./configurarSubsecao.php" method="post" style="display: inline;">
+                        <input type="hidden" name="id" value="<?= $subsecaoFull->id ?>">
+                        <button class="btn btn-warning mt-2 text-white">
+                            <i class="nav-icon fas fa-cogs"></i>
+
+                            Configurar
+                        </button>
+                    </form>
+
+                    <form action="./editarSubsecao.php" method="post" style="display:inline;">
+
+                        <input type="hidden" name="subsecao" value="<?= $subsecaoFull->id ?>">
+                        <button class="btn btn-primary mt-2">
+                            <i class="nav-icon fas fa-edit"></i>
+                            Editar
+
+                        </button>
+
+                    </form>
+
+                    <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#myModal">
+                        <i class="nav-icon fas fa-trash"></i>
+                        Excluir
+                    </button>
+
+                    
+                    {% if conteudo ==  '' %}
+
+                        <button type="button" class="btn btn-secondary mt-2 <?= $disabled ?>" data-toggle="modal" data-target="#limpar" disabled>
+                            <i class="nav-icon fas fa-eraser"></i>
+                            Limpar
+
+                        </button>
+
+                  {% else %}
+
+                
+                        <button type="button" class="btn btn-secondary mt-2" data-toggle="modal" data-target="#limpar">
+                            <i class="nav-icon fas fa-eraser"></i>
+                            Limpar
+
+                        </button>
+
+                  {% endif %}
+
+                    <!-- <i class=" far fa-eye-slash" style="position: absolute;top:5%; right: 10%;top:5%; font-size: 26px;opacity: 0.4"></i>
+
+                    <form action="" method="POST" style="position: absolute;top:5%; right: 5%;" id="form">
+
+                        <i class="<?= $visivel ?>" id="icon-visibilidade" style="position: absolute;top:5%; right: 0px;top:5%; font-size: 26px;opacity: 0.4"></i>
+
+
+
+                    </form> -->
+
+
+
+                    <div class="modal" id="limpar">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Limpar Conteúdo</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p style="font-size: 20px">
+                                        Tem certeza que deseja limpar o conteúdo?
+                                    </p>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+
+                                    <form action="../../backend/limparSubsecao.php" method="post">
+                                        <input type="hidden" name="url_destino" value="../pages/admin/view.php?subsecao=<?= $subsecaoFull->id ?>">
+                                        <input type="hidden" name="id" value="<?= $subsecaoFull->id ?>">
+                                        <input type="hidden" name="id_usuario" value="1">
+                                        <button class="btn btn-success">Sim</button>
+                                    </form>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Excluir Subseção</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p style="font-size: 20px;">
+                                        Tem certeza que deseja excluir esta subseção?
+                                    </p>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+
+                                    <form action="../../backend/excluirSubsecao.php" method="post">
+                                        <input type="hidden" name="url_destino" value="../pages/admin/">
+                                        <input type="hidden" name="id" value="<?= $subsecaoFull->id ?>">
+                                        <input type="hidden" name="id_secao" value="<?= $subsecaoFull->id_secao ?>">
+                                        <input type="hidden" name="ordem" value="<?= $subsecaoFull->ordem ?>">
+                                        <button class="btn btn-success">Sim</button>
+                                    </form>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+
+   {% if conteudo != '' %}
+
+        <section class="container">
+            <div class="container">
+                <h1>{{subsecao.titulo}}</h1>
+                <hr>
+            </div>
+            <div class="container text-justify">
+
+               {{subsecao.conteudo}}
+
+            </div>
+
+        </section>
+
+    {% else %}
+
+        <section>
+            <div class="container">
+                <h1>{{ subsecao.titulo }}</h1>
+                <hr>
+            </div>
+            <div class="container text-justify">
+
+
+
+            </div>
+
+        </section>
+
+    {% endif %}
+    <!-- /.content -->
+</div>
+
+{% endblock %}

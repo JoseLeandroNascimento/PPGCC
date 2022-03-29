@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'upload',
     'noticias',
     'login',
+    'subsecao',
 
 ]
 
