@@ -121,7 +121,7 @@ def updateSecao(request):
             lista_aux.append(dados)
 
 
-        print(str(lista_aux))
+        
 
         for sec in lista_aux:
 
@@ -158,14 +158,12 @@ def updateSecao(request):
                    sec[1] =  sec[1] + 1
                 
 
-        print(str(lista_aux))
 
         for sec in lista_aux:
 
             secao_update = Secao.objects.get(id=sec[0])
             secao_update.ordem = sec[1]
             secao_update.save()
-            print(secao_update.ordem)
             
           
 

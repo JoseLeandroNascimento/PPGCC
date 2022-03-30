@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block conteudo %}
+
+<section class="content">
+
+
+    <div class="container">
+
+
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <h3>Configurar Subseção: {{ subsecao.titulo}}
+                    </h3>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <form action="/subsecao-update/" method="post">
+
+                    {% csrf_token %}
+                    <div class="row p-0 mb-3">
+                        <div class="col-8">
+                            <label for="titulo">Titulo</label>
+                            <input type="text" maxlength="30" name="titulo" autocomplete="off" id="titulo" class="form-control" placeholder="ex: Introdução" value="{{ subsecao.titulo }}" required>
+
+
+                        </div>
+                        <div class="col-4">
+
+
+                            <label for="ordem">Ordem</label>
+                            <select name="ordem" id="ordem" class="form-control">
+                                {% for ordem in cont_subsecoes %}
+
+                                    {% if ordem == subsecao.ordem %}
+
+                                        <option value="{{ordem}}" selected>
+
+
+                                            {{ ordem }}
+
+                                        </option>
+
+                                    {% else %}
+
+
+                                        <option value="{{ ordem }}">
+
+
+                                            {{ ordem }}
+
+                                        </option>
+
+
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Visibilidade da Página</label>
+                    <div class="form-check">
+                        <label class="form-check-label">
+
+                            {% if subsecao.ativo == True %}
+                                <input type="radio" value="1" class="form-check-input" name="ativada" checked>Ativada
+                            {% else %}
+                                <input type="radio" value="1" class="form-check-input" name="ativada">Ativada
+                            {% endif %}
+                        </label>
+                    </div>
+                    <div class="form-check mb-4">
+                        <label class="form-check-label">
+
+                            {% if subsecao.ativo == False %}
+
+                                <input type="radio" value="0" class="form-check-input" name="ativada" checked>Desativada
+
+                            {% else %}
+
+                                <input type="radio" value="0" class="form-check-input" name="ativada">Desativada
+
+                            {% endif %}
+                        </label>
+                    </div>
+
+
+
+                    <input type="hidden" name="id_usuario" value="{{usuario_logado}}">
+                    <input type="hidden" name="id_subsecao" value="{{subsecao.id}}">
+                    <input type="hidden" name="ordem_atual" value="{{subsecao.ordem}}">
+                    <input type="hidden" name="id_secao" value="{{subsecao.secao.id}}">
+                    <div class="text-center mt-5">
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="nav-icon fas fa-save"></i>
+                            Salvar
+                        </button>
+                        <a href="/subsecao-view/{{subsecao.id}}" class="btn btn-danger">
+                            <i class="fas fa-ban"></i> Cancelar
+                        </a>
+
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+{% endblock %}

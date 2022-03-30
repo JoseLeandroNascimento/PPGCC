@@ -1,22 +1,30 @@
+
 from os import sep
+from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from  defesa.models import  Defesa
 from secao.models import Secao
 from subsecao.models import Subsecao
 from usuario.models import Usuario
+from django.contrib import messages
 
 def defesa(request):
 
     defesas = Defesa.objects.all()
     secoes = Secao.objects.all().order_by('ordem')
     subsecoes = Subsecao.objects.all().order_by('ordem')
+    
+    usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-    # usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-
-    # return render(request, 'defesa/index.html',{'defesas':defesas,"secoes":secoes,'usuario_logado':usuario_logado})
-    return render(request, 'defesa/index.html',{'defesas':defesas,"secoes":secoes,"subsecoes":subsecoes})
+    return render(request, 'defesa/index.html',{
+        'defesas':defesas,
+        "secoes":secoes,
+        'usuario_logado':usuario_logado,
+        "subsecoes":subsecoes
+        })
+   
 
 
 def cadatroDefesa(request):
@@ -37,12 +45,38 @@ def salvarDefesa(request):
         local  = dados.get('local')
         horario = dados.get('horario')
         conteudo = dados.get('conteudo')
+     
 
-        novaDefesa = Defesa(titulo=titulo,local=local,horario=horario,conteudo=conteudo)
+        try:
 
-        novaDefesa.save()
+            novaDefesa = Defesa(titulo=titulo,local=local,horario=horario,conteudo=conteudo)
+            novaDefesa.save()
 
-        
+            messages.add_message(request,messages.SUCCESS,"Defesa criada com sucesso")
+
+        except IntegrityError:
+
+            if (Defesa.objects.get(titulo = titulo)):
+
+                secoes = Secao.objects.all().order_by('ordem')
+                usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+                subsecoes = Subsecao.objects.all().order_by('ordem')
+
+                messages.add_message(request,messages.WARNING,"Já existe um defesa com mesmo titulo")
+                return render(request,"defesa/cadastroDefesa.html",{
+                    "secoes":secoes,
+                    'usuario_logado':usuario_logado,
+                    "subsecoes":subsecoes,
+                    "titulo":titulo,
+                    "local":local,
+                    "horario":horario,
+                    "conteudo":conteudo
+                    })
+
+
+            else:
+                
+                messages.add_message(request,messages.WARNING,"Notícia não pode ser criada")
 
     return redirect('/defesa/')
 

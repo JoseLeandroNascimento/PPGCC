@@ -1,4 +1,5 @@
 
+from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from noticias.models import Noticia
 from secao.models import Secao
@@ -55,7 +56,6 @@ def salvar_noticia(request):
         conteudo = request.POST.get("conteudo")
         img_id = request.POST.get('img_id')
 
-        print(img_id)
         if(img_id == '-1'):
 
             messages.add_message(request, messages.WARNING,"É necessário fornecer uma imagem")
@@ -65,19 +65,30 @@ def salvar_noticia(request):
 
             img = Arquivo.objects.get(id = img_id )
 
-            print(img_id)
-            print(img.nome)
             try:
                                 
                 usuario = Usuario.objects.get(
                 id=request.session.get('id_usuario'))
-
+                messages.add_message(request,messages.SUCCESS,"Notícia publicada com sucesso")
             except:
 
                 usuario = None
 
             novaNoticia = Noticia(titulo= titulo, previa = previa, conteudo=conteudo, img= img, usuario = usuario)
-            novaNoticia.save()
+
+            try:
+                novaNoticia.save()
+
+            except IntegrityError:
+
+                messages.add_message(request, messages.WARNING,
+                """Houve um erro ao tentar salvar a noticia, o motivo pode ser um desses:
+                    <ul>
+                        <li>Não foi informado uma imagem</li>
+                    </ul>
+                """)
+
+
 
     return redirect("/noticias/")
 
@@ -85,9 +96,20 @@ def salvar_noticia(request):
 def excluir_noticia(request):
 
     if(request.method == "POST"):
-        id = request.POST.get("id_noticia")
-        noticia = Noticia.objects.filter(id=id).first()
-        noticia.delete()
+        
+        try:
+            
+            id = request.POST.get("id_noticia")
+            noticia = Noticia.objects.filter(id=id).first()
+            noticia.delete()
+            messages.add_message(request, messages.WARNING,"Notícia deletada com sucesso")
+
+        
+        except IntegrityError:
+            
+            messages.add_message(request, messages.ERROR,"Noticia não pode ser deletada")
+
+
     return redirect("/noticias/")
 
 
@@ -99,20 +121,20 @@ def editar_noticia(request):
 
     if(request.method == "POST"):
 
-        id = request.POST.get("id_noticia")
-        noticia = Noticia.objects.filter(id=id).first()
 
 
-    try:
+        try:
 
-        usuario_logado = Usuario.objects.get(
-            id=request.session.get('id_usuario'))
+            id = request.POST.get("id_noticia")
+            noticia = Noticia.objects.filter(id=id).first()
+            usuario_logado = Usuario.objects.get(
+                id=request.session.get('id_usuario'))
 
-    except:
+        except:
 
-        usuario_logado = None
+            usuario_logado = None
 
-    return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,'imagens':imagens,"subsecoes":subsecoes})
+        return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,'imagens':imagens,"subsecoes":subsecoes})
 
 
 def update_noticia(request):
@@ -132,8 +154,16 @@ def update_noticia(request):
         noticia.conteudo = conteudo
         noticia.id_usuario = id_usuario
         noticia.img = img
-        noticia.save()
 
+        try:
+            
+            noticia.save()
+            messages.add_message(request,messages.SUCCESS,"Notícia editada com sucesso")
+
+        except IntegrityError:
+
+            messages.add_message(request,messages.ERROR,"Não foi possivel editar a notícia")
+            
     return redirect("/noticias/")
 
 

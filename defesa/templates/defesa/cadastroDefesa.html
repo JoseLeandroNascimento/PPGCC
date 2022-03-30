@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-
-{% block menu-defesa %}
+{% extends "base.html" %} {% block menu-defesa %}
 <li class="nav-item active">
     <a href="/defesa/" class="nav-link">
 
@@ -11,9 +9,7 @@
     </a>
 
 </li>
-{% endblock %}
-
-{% block conteudo %}
+{% endblock %} {% block conteudo %}
 <section class="content">
 
 
@@ -33,16 +29,17 @@
 
                     {% csrf_token %}
                     <label>Título</label>
-                    <input type="text" name="titulo" class="form-control" placeholder="Digite o título" required>
+                    <input type="text" name="titulo" class="form-control" placeholder="Digite o título" value="{{titulo}}" required>
+
                     <br>
                     <label>Local</label>
-                    <input type="text" name="local" class="form-control" placeholder="Digite o local" required>
+                    <input type="text" name="local" class="form-control" placeholder="Digite o local" value="{{local}}" required>
                     <br>
                     <label>Data e hora</label>
-                    <input type="datetime-local" name="horario" class="form-control" required>
+                    <input type="datetime-local" value="{{horario}}" name="horario" class="form-control" required>
                     <br>
                     <label>Conteúdo</label>
-                    <textarea name="conteudo" class="conteudo" placeholder="Escreva o conteúdo aqui"></textarea>
+                    <textarea name="conteudo" class="conteudo" placeholder="Escreva o conteúdo aqui">{{conteudo}}</textarea>
 
                     <input type="hidden" name="id_usuario" value="<?= $usuario_logado['id'] ?>">
 
@@ -53,8 +50,7 @@
                             Salvar
                         </button>
                         <a href="/defesa/" class="btn btn-danger">
-                            <i class="fas fa-ban"></i>
-                            Cancelar
+                            <i class="fas fa-ban"></i> Cancelar
                         </a>
                     </div>
                 </form>

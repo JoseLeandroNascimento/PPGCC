@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block conteudo %}
+
+<section class="content">
+
+    <form action="/subsecao-atualizar/" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="id_subsecao" value="{{subsecao.id}}">
+        <br>
+        <label for="">
+        <h5>Título</h5>
+        </label>
+        <input class="form-control" type="text" name="titulo" placeholder="Digite o titulo" value="{{subsecao.titulo}}">
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-outline card-info">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            Editar Subseção: {{ subsecao.titulo }}
+                        </h2>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <textArea name="conteudo" class="form-control conteudo" placeholder="Escreva o artigo aqui">
+                            {{subsecao.conteudo}}
+                        </textArea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- /.col-->
+        </div>
+        <div class="text-center">
+
+            <button class="btn btn-success mb-4">
+          <i class="nav-icon fas fa-save"></i>
+          Salvar
+        </button>
+            <a href="/subsecao-view/{{subsecao.secao.id}}" class="btn btn-danger mb-4">
+                <i class="fas fa-ban"></i> Cancelar
+            </a>
+
+
+        </div>
+    </form>
+
+
+</section>
+
+{% endblock %}

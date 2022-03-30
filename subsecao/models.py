@@ -25,7 +25,7 @@ class Subsecao(models.Model):
 
     conteudo = models.TextField()
 
-    ordem = models.IntegerField(unique=True)
+    ordem = models.IntegerField()
 
     usuarios = models.ForeignKey(
 
