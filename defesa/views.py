@@ -91,7 +91,14 @@ def excluirDefesa(request):
 
         defesa = Defesa.objects.filter(id=id).first()
 
-        defesa.delete()
+        try:
+
+            defesa.delete()
+            messages.add_message(request,messages.SUCCESS,"Defesa deletada com sucesso")
+
+        except IntegrityError:
+
+            messages.add_message(request,messages.WARNING,"Não foi possível deletar defesa")
     
     return redirect("/defesa/")
 
@@ -155,6 +162,37 @@ def updateDefesa(request):
             defesa.local = local
             defesa.horario = horario
             defesa.conteudo = conteudo
+
+
+            try:
+
+                defesa.save()
+
+                messages.add_message(request,messages.SUCCESS,"Defesa foi editada com sucesso")
+
+            except IntegrityError:
+
+                if (Defesa.objects.get(titulo = titulo)):
+
+                    secoes = Secao.objects.all().order_by('ordem')
+                    usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+                    subsecoes = Subsecao.objects.all().order_by('ordem')
+
+                    messages.add_message(request,messages.WARNING,"Já existe uma defesa com mesmo título")
+                    return render(request,"defesa/cadastroDefesa.html",{
+                        "secoes":secoes,
+                        'usuario_logado':usuario_logado,
+                        "subsecoes":subsecoes,
+                        "titulo":titulo,
+                        "local":local,
+                        "horario":horario,
+                        "conteudo":conteudo
+                        })
+
+
+                else:
+                    
+                    messages.add_message(request,messages.WARNING,"Defesa não pode ser editada")
 
             defesa.save()
 
