@@ -1,3 +1,4 @@
+from django.contrib import messages
 from re import sub
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
@@ -16,7 +17,14 @@ def cadastroSubsecao(request, id_secao):
     secoes = Secao.objects.all().order_by('ordem')
     subsecoes = Subsecao.objects.all().order_by('ordem')
 
-    return render(request, 'subsecao/index.html', {"id_secao": id_secao, "subsecoes": subsecoes, "cont_subsecoes": cont_subsecoes, "max_ordem": max_ordem, "usuario_logado": usuario_logado, "secoes": secoes, "subsecoes": subsecoes})
+    return render(request, 'subsecao/index.html', {
+        "id_secao": id_secao, 
+        "subsecoes": subsecoes, 
+        "cont_subsecoes": cont_subsecoes, 
+        "max_ordem": max_ordem, 
+        "usuario_logado": usuario_logado, 
+        "secoes": secoes, 
+        "subsecoes": subsecoes})
 
 
 def salvarSubsecao(request):
@@ -46,9 +54,18 @@ def salvarSubsecao(request):
         try:
 
             novaSubsecao.save()
-
+            messages.add_message(request,messages.SUCCESS,"Subseção criada com sucesso!")
+            
         except IntegrityError:
 
+            if len(Subsecao.objects.filter(titulo=titulo)) >0:
+
+                messages.add_message(request,messages.WARNING,"Já existe subseção com mesmo nome")
+                return redirect('/subsecao-cadastro/'+str(id_secao))
+
+            else:
+                
+                messages.add_message(request,messages.WARNING,"Ocorreu um erro na criação da defesa")
             return redirect('/home/')
 
         return redirect('/subsecao-view/'+str(novaSubsecao.id))
@@ -137,6 +154,8 @@ def updateSubsecao(request):
         try:
 
             subsecao.save()
+            messages.add_message(request,messages.SUCCESS,"Alterações realizadas com sucesso!")
+            
 
         except IntegrityError:
 
@@ -213,9 +232,11 @@ def atualizarSubsecao(request):
         try:
 
             subsecao.save()
+            messages.add_message(request,messages.SUCCESS,"Subseção foi atualizada com sucesso")
 
         except IntegrityError:
 
+            messages.add_message(request,messages.WARNING,"Ocorreu um error na atualização da secao")
             return redirect('/subsecao-view/'+str(subsecao.id))
 
         return redirect('/subsecao-view/'+str(subsecao.id))
@@ -229,14 +250,22 @@ def delete(request):
         ordem = subsecao.ordem
         subsecoes = Subsecao.objects.filter(secao=subsecao.secao)
 
-        subsecao.delete()
+        try:
 
-        for sub in subsecoes:
+            subsecao.delete()
 
-            if sub.ordem > ordem:
+            for sub in subsecoes:
 
-                sub.ordem = sub.ordem - 1
-                sub.save()
+                if sub.ordem > ordem:
+
+                    sub.ordem = sub.ordem - 1
+                    sub.save()
+
+            messages.add_message(request,messages.SUCCESS,"Subseção foi deletada com sucesso")
+
+        except IntegrityError:
+
+            messages.add_message(request,messages.WARNING,"Ocorreu um erro na deleção da subseção")
 
         return redirect('/home/')
 
@@ -248,6 +277,17 @@ def subsecaoClear(request):
         subsecao = Subsecao.objects.get(id=request.POST.get('id_subsecao'))
 
         subsecao.conteudo = ''
-        subsecao.save()
+
+        try:
+
+            subsecao.save()
+            messages.add_message(request,messages.SUCCESS,"Conteúdo foi limpo com sucesso!")
+
+        except IntegrityError:
+
+            messages.add_message(request,messages.WARNING,"Ocorreu um erro na tentativa de limpar o contéudo da subsecao")
+
+
+
 
         return redirect('/subsecao-view/'+str(subsecao.id))
