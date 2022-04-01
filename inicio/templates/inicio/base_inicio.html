@@ -1,0 +1,335 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <title>PPGCC</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css'  %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style-defesas.css' %}">
+
+    
+</head>
+
+<body>
+
+
+    <header>
+
+        <div class="fundo-cabecalho">
+
+            <div class="container" style="display:flex; flex-direction:row; justify-content:space-between; align-items:center;">
+                <img src="{% static 'img/ouo.svg' %}" class="logo">
+            </div>
+
+        </div>
+
+
+        <nav class="navbar navbar-expand-md navbar-dark p-0" style="background-color: #2969BD;width: 100%;z-index:10;">
+            <div class="container">
+                
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse div-menu vertical-menu" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item pt-2 pb-2 mr-1">
+
+                            <a class="nav-link text-white menu-ativado texto-menu" href="">
+
+                                <i class="fas fa-home"></i>
+
+                                Página Inicial
+
+                            </a>
+                        </li>
+
+                        {% for secao in secoes %}
+
+                            <li class="nav-item dropdown pt-2 pb-2 mr-1">
+
+
+                                <a class="nav-link  text-white menu-hover texto-menu" data-toggle="dropdown" href="">{{secao.titulo}}</a>
+
+
+                                <div class="dropdown-menu caixa-menu-suspenso" style="z-index: 1000; position: absolute;">
+
+                                   {%  for subsecao in subsecoes %}
+
+                                        {% if subsecao.secao == secao %}
+                                        
+                                            <a class="dropdown-item opcao-menu" style="z-index: 500;" href="">{{subsecao.titulo}}</a>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                        <li class="nav-item pt-2 pb-2 mr-1">
+                            <a class="nav-link text-white menu-hover texto-menu" href="noticias.php">Notícias</a>
+                        </li>
+                        <li class="nav-item pt-2 pb-2 mr-1">
+                            <a class="nav-link text-white menu-hover texto-menu" href="defesas.php">Defesas</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+    </header>
+
+    <main style="position: relative;min-height:80%;">
+
+        <div class="container mt-5">
+
+
+            <h3><i class="fas fa-newspaper"></i> Notícias</h3>
+            <hr>
+            <div class="container-noticias">
+
+                <div class="noticia-categoria">
+
+                    <h3 class="texto-categoria text-white m-auto"> <strong>Últimas Notícias</strong></h3>
+
+                </div>
+
+
+                <div class="noticias">
+
+                    {% if not noticias %}
+
+                        <p class="text-white mt-5">Nenhuma notícia</p>
+
+                    {% else %}
+
+                        {% for noticia in noticias %}
+                            <div class="box-noticias">
+
+                                <div class="box-img">
+                                    <img src="<?= $img ?>" class="img-noticia" alt="">
+                                </div>
+                                <div class="box-titulo">
+
+
+                                    <h3 class="style-titulo">
+                                        <a href="viewnoticia.php?noticia_id=<?= $noticia['id'] ?>" title="<?= $noticia['titulo'] ?>">
+                                            <strong>
+
+                                                {{noticia.titulo}}
+
+                                            </strong>
+                                        </a>
+                                    </h3>
+
+                                    <div class="w-100 pl-3 pr-3">
+                                    {{noticia.previa}}
+                                    </div>
+                                </div>
+                                <div class="btn-ler-noticia" style="font-size: 15px; color: black">
+
+                                   
+                                    <i class="far fa-calendar-alt mr-1"></i>
+
+                                    {{noticia.data_publicacao|date:'H:i'}}
+
+                                    <i class="far fa-clock ml-3 mr-1"></i>
+
+                                    {{noticia.data_publicacao|date:'d/m/Y'}}
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+                    
+
+
+
+                   
+                </div>
+
+
+                <div class="container-rodape mt-3 mb-3">
+
+                    <a href="./noticias.php" class="btn btn-primary"><i class="fas fa-bars"></i> Ver todas</a>
+                </div>
+
+            </div>
+
+
+
+            <h3 class="mt-5">
+                <i class="fas fa-user-graduate"></i> Defesas
+            </h3>
+            <hr>
+
+            <div class="container-defesas">
+                <div class="container-header">
+                    <div class="container-dias" id="area-dia">
+                        <h3>Próximas Defesas</h3>
+                    </div>
+                </div>
+
+
+                <div class="container-body">
+
+                    <br>
+
+                    <?php
+                    $cont = 0;
+                    while ($defesa = mysqli_fetch_array($defesas)) {
+                        $cont++;
+                    ?>
+                        <a href="viewdefesa.php?defesa_id=<?= $defesa['id'] ?>" class=" box-defesa">
+                            <div class="box-header" title="<?= $defesa['titulo'] ?>">
+                                <p class="texto-titulo">
+                                    <?php
+                                    if (strlen($defesa['titulo']) == 0)
+                                        $res = 'Evento sem título';
+                                    else if (strlen($defesa['titulo']) > 0 && strlen($defesa['titulo']) < 150)
+                                        $res = substr($defesa['titulo'], 0, 150);
+                                    else if (strlen($defesa['titulo']) > 0 && strlen($defesa['titulo']) >= 150)
+                                        $res = substr($defesa['titulo'], 0, 150) . '...';
+                                 
+                                    echo $res;
+                                    ?>
+                                </p>
+
+                            </div>
+                            <hr>
+                            <div class="box-info">
+
+                                <div title="<?= $defesa['local'] ?>">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <?php
+                                    if (strlen($defesa['local']) == 0)
+                                        $res = 'Local não definido';
+                                    else if (strlen($defesa['local']) > 0 && strlen($defesa['local']) < 35)
+                                        $res = substr($defesa['local'], 0);
+                                    else if (strlen($defesa['local']) > 0 && strlen($defesa['local']) >= 35)
+                                        $res = substr($defesa['local'], 0, 35) . '...';
+                                    echo $res;
+                                    ?>
+                                </div>
+                                <div>
+                                    <i class="far fa-calendar-alt"></i>
+                                    <?php
+                                    $dia = substr($defesa['horario'], 8, 2);
+                                    $mes = substr($defesa['horario'], 5, 2);
+                                    $ano = substr($defesa['horario'], 0, 4);
+                                    echo $dia . '/' . $mes . '/' . $ano;
+                                    ?>
+                                    <i class="far fa-clock ml-3"></i>
+                                    <?php
+                                    $horario = substr($defesa['horario'], 11, 5);
+                                    echo $horario;
+                                    ?>
+                                </div>
+                            </div>
+
+                        </a>
+
+
+                    <?php
+                        if ($cont == 3) {
+                            break;
+                        }
+                    }
+
+                    if($cont == 0){
+                    ?>
+                    <div class="w-100 text-center mt-5">
+                        <p class="text-black">Nenhuma defesa</p>
+
+                    </div>
+
+                    <?php } ?>
+                </div>
+
+
+
+                <div class="container-btn-mostra-mais mb-5 mt-3">
+
+                    <a href="defesas.php" class="btn btn-primary"><i class="fas fa-bars"></i> Ver todas</a>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{% static 'js/defesas-scripts.js' %}"></script>
+</body>
+
+<footer class="main-footer rodape">
+
+
+    <div class="rodape-img">
+
+        <a  href="http://www.ufac.br">
+    
+            <img src="{% static 'img/logoUFAC.svg' %}" class="img-rodape">
+    
+        </a>
+    </div>
+    <div class="rodape-info">
+
+        <p>
+
+            Universidade Federal do Acre - Programa de Pós Graduação em Ciência da Computação
+            <br>
+            Rodovia BR-364, Km-04, Distrito Industrial, CEP: 69920-900, Rio Branco/AC - BR
+            <br>
+            Telefone: (68) 3901-2510
+
+        </p>
+
+
+    </div>
+
+
+    <div class="rodape-contatos">
+        <strong>Copyright &copy;</strong>
+        All rights reserved.
+        <b>Version</b>
+        1.0.0-<a href="./login.php" target="_blank" class="login-admin">rc</a> - por
+        <a href="https://github.com/AndreCacau" target="_blank">: André de Oliveira Cacau</a>
+        <a href="https://github.com/EliasCacau" target="_blank">, Elias de Oliveira Cacau</a>
+        <a href="https://github.com/JoseLeandroNascimento" target="_blank">, José Leandro da Silva Nascimento</a>
+        <a href="https://github.com/VictoriaCavalcante" target="_blank">, Victória Karolina de Lima Cavalcante</a>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/voltar.js' %}"></script>
+
+    </body>
+
+</footer>
+
+</html>

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'noticias',
     'login',
     'subsecao',
+    'inicio'
 
 ]
 
