@@ -1,0 +1,44 @@
+{% extends "inicio/base_inicio.html" %} {% block menu-noticias %}
+<li class="nav-item pt-2 pb-2 mr-1">
+    <a class="nav-link text-white menu-ativado texto-menu " href="/view-noticias/">Notícias</a>
+</li>
+{% endblock %} {% block conteudo %}
+
+<main style="position: relative;min-height:80%;">
+
+    <div class="container mt-3 box-container-view">
+        <div class="area-voltar">
+
+            <a href="./noticias.php" class="link-voltar voltar btn btn-warning">
+                <i class="far fa-arrow-alt-circle-left"></i> Voltar
+            </a>
+        </div>
+        <hr>
+        <h3 style="text-align: center;">
+            {{ noticia.titulo }}
+        </h3>
+
+
+
+
+
+        <div style="text-align: right;">
+            <i class="far fa-calendar-alt ml-3"></i> {{noticia.data_publicacao|date:'d/m/Y'}}
+            <i class="far fa-clock ml-3"></i> {{noticia.data_publicacao|date:'h:i'}}
+        </div>
+
+
+        <hr>
+
+        <div class="box-imagem-view">
+            <img src="../media/{{noticia.img.url}}" class="img-noticia-cabecalho">
+
+        </div>
+
+        <div class="box-conteudo-view">
+
+            {{ noticia.conteudo|safe }}
+        </div>
+
+    </div>
+</main> {% endblock %}

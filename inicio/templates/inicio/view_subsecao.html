@@ -1,0 +1,70 @@
+{% extends "inicio/base_inicio.html" %} {% block conteudo %}
+
+<main style="position: relative;min-height:80%;">
+
+    <div class="container">
+
+
+
+        <div class="row" id="frame-grande">
+
+            <div class="col-3">
+
+
+                <!-- style="z-index: 10;width: 21%;position: fixed; left:90px;transition:left 0.1s linear;" -->
+                <ul class="list-group mt-5 mb-3 " style="position: sticky; top: 50px">
+
+                    <li class="list-group-item  text-center font-weight-bold text-white text-truncate" style="font-size: 18px; background-color: #2969BD">
+                        {{subsecao.titulo}}
+                    </li>
+
+                    {% for sub in subsecoes %} {% if sub.secao == subsecao.secao %} {% if sub.id == subsecao.id%}
+                    <a class="list-group-item text-left text-decoration-none text-dark text-truncate caixa-menu-lateral" href="/view-subsecao/{{sub.id}}">
+                        <div class="subsecao-ativada"></div>
+                        {{sub.titulo}}
+                    </a>
+
+                    {% else %}
+
+                    <a class="list-group-item text-left text-decoration-none text-dark text-truncate caixa-menu-lateral" href="/view-subsecao/{{sub.id}}">
+                        <div class="menu-lateral-hover"></div>
+                        {{sub.titulo}}
+                    </a>
+
+                    {% endif %} {% endif %} {% endfor %}
+
+
+                </ul>
+
+            </div>
+
+            <div class="col-9 mt-5 mb-5" style="overflow:hidden;word-break: break-word">
+
+                <h3 class="titulo-cabecalho">
+                    {{subsecao.titulo}}
+                </h3>
+                <hr> {{subsecao.conteudo|safe}}
+
+            </div>
+
+        </div>
+
+        <div id="frame-pequeno">
+
+            <div class="col mt-5 mb-5" style="overflow: hidden;word-break: break-word">
+
+                <h3>
+                    {{subsecao.titulo}}
+                </h3>
+                <hr> {{subsecao.conteudo|safe}}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+{% endblock %}

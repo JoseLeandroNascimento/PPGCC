@@ -1,0 +1,40 @@
+{% extends 'inicio/base_inicio.html' %} {% block menu-defesas %}
+<li class="nav-item pt-2 pb-2 mr-1">
+    <a class="nav-link text-white menu-ativado texto-menu" href="/view-defesas/">Defesas</a>
+</li>
+{% endblock %} {% block conteudo %}
+
+<main style="min-height: 75%;">
+
+    <div class="container mt-3" style="overflow: hidden;word-break: break-word">
+        <div class="area-voltar">
+
+            <a href="" class="link-voltar voltar btn btn-warning">
+                <i class="far fa-arrow-alt-circle-left"></i> Voltar
+            </a>
+        </div>
+        <hr>
+        <h3 style="text-align: center;">
+            {{defesa.titulo}}
+        </h3>
+        <div style="text-align: right;">
+            <i class="fas fa-map-marker-alt"></i>
+            <h6 style="display: inline;">
+                {{defesa.local}}
+            </h6>
+            <i class="far fa-calendar-alt ml-3"></i>
+            <h6 style="display: inline;">
+                {{defesa.horario|date:'d/m/Y'}}
+                <i class="far fa-clock ml-3"></i> {{defesa.horario|date:'h:i'}}
+            </h6>
+        </div>
+
+        <hr> {{defesa.conteudo|safe}}
+
+    </div>
+
+
+</main>
+
+
+{% endblock %}

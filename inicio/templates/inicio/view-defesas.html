@@ -1,0 +1,81 @@
+{% extends 'inicio/base_inicio.html' %} {% block menu-defesas %}
+<li class="nav-item pt-2 pb-2 mr-1">
+    <a class="nav-link text-white menu-ativado texto-menu" href="/view-defesas/">Defesas</a>
+</li>
+{% endblock %} {% block conteudo %}
+<style>
+    main {
+        display: flex;
+        justify-content: center;
+        min-height: 75%;
+    }
+    
+    #lista-defesas {
+        width: 50%;
+    }
+    
+    @media all and (max-width: 480px) {
+        #lista-defesas {
+            width: 90%;
+        }
+    }
+</style>
+<main>
+
+    <!-- style="z-index: 10;width: 21%;position: fixed; left:90px;transition:left 0.1s linear;" -->
+
+    <div class="container">
+
+        <div class="defesa-titulo container">
+            <h3><i class="fas fa-user-graduate"></i> Defesas</h3>
+            <hr>
+        </div>
+
+        <div class="defesas container">
+
+            {% if defesas %} {% for defesa in defesas %}
+
+
+            <a class="link-defesa defesa" href="/view-defesa/{{defesa.id}}">
+
+
+                <div class="box-info">
+                    <p>
+
+                        <i class="far fa-calendar-alt"></i> {{defesa.horario|date:'d/m/Y'}}
+                    </p>
+                    <p>
+                        <i class="far fa-clock"></i> {{defesa.horario|date:'h:i'}}
+
+                    </p>
+                    <p>
+
+                        <i class="fas fa-graduation-cap"></i> Defesa
+                    </p>
+                </div>
+                <div class="box-conteudo">
+
+                    <div class="container-titulo">
+
+
+                        <strong>{{defesa.titulo}}</strong><br>
+                        <div class="container-local">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2"></i> {{defesa.local}}
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </a>
+
+            {% endfor %} {% else %}
+            <div>
+                Nenhuma Defesa
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% endblock %}

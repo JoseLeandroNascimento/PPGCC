@@ -1,3 +1,150 @@
-{% extends "inicio/base_inicio.html" %}
+{% extends "inicio/base_inicio.html" %} {% block menu-home %}
+<a class="nav-link text-white menu-ativado texto-menu" href="/">
+
+    <i class="fas fa-home"></i> Página Inicial
+
+</a>
+{% endblock %} {% block conteudo%}
+
+<main style="position: relative;min-height:80%;">
 
 
+
+
+
+    <div class="container mt-5">
+
+
+        <h3><i class="fas fa-newspaper"></i> Notícias</h3>
+        <hr>
+        <div class="container-noticias">
+
+            <div class="noticia-categoria">
+
+                <h3 class="texto-categoria text-white m-auto"> <strong>Últimas Notícias</strong></h3>
+
+            </div>
+
+
+            <div class="noticias">
+
+                {% if not noticias %}
+
+                <p class="text-white mt-5">Nenhuma notícia</p>
+
+                {% else %} {% for noticia in noticias %}
+                <div class="box-noticias">
+
+                    <div class="box-img">
+                        <img src="../media/{{noticia.img.url}}" class="img-noticia" alt="">
+                    </div>
+                    <div class="box-titulo">
+
+
+                        <h3 class="style-titulo">
+                            <a href="view-noticia/{{noticia.id}}" title="<?= $noticia['titulo'] ?>">
+                                <strong>
+                            {{noticia.titulo}}
+                            </strong>
+                            </a>
+                        </h3>
+
+                        <div class="w-100 pl-3 pr-3">
+                            {{noticia.previa}}
+                        </div>
+                    </div>
+                    <div class="btn-ler-noticia" style="font-size: 15px; color: black">
+
+
+                        <i class="far fa-calendar-alt mr-1"></i> {{noticia.data_publicacao|date:'H:i'}}
+
+                        <i class="far fa-clock ml-3 mr-1"></i> {{noticia.data_publicacao|date:'d/m/Y'}}
+
+                    </div>
+
+                </div>
+
+                {% endfor %} {% endif %}
+
+
+
+
+
+            </div>
+
+
+            <div class="container-rodape mt-3 mb-3">
+
+                <a href="/view-noticias/" class="btn btn-primary"><i class="fas fa-bars"></i> Ver todas</a>
+            </div>
+
+        </div>
+
+
+
+        <h3 class="mt-5">
+            <i class="fas fa-user-graduate"></i> Defesas
+        </h3>
+        <hr>
+
+        <div class="container-defesas">
+            <div class="container-header">
+                <div class="container-dias" id="area-dia">
+                    <h3>Próximas Defesas</h3>
+                </div>
+            </div>
+
+
+            <div class="container-body">
+
+                <br> {% if not defesas %}
+
+                <div class="w-100 text-center mt-5">
+                    <p class="text-black">Nenhuma defesa</p>
+
+                </div>
+
+                {% else %} {% for defesa in defesas %}
+
+                <a href="/view-defesa/{{defesa.id}}" class=" box-defesa">
+                    <div class="box-header" title="{{defesa.titulo}}">
+                        <p class="texto-titulo">
+                            {{defesa.titulo}}
+                        </p>
+
+                    </div>
+                    <hr>
+                    <div class="box-info">
+
+                        <div title="{{defesa.local}}">
+                            <i class="fas fa-map-marker-alt"></i> {{defesa.local}}
+                        </div>
+                        <div>
+                            <i class="far fa-calendar-alt"></i> {{defesa.horario|date:'d/m/Y'}}
+                            <i class="far fa-clock ml-3"></i> {{defesa.horario|date:'h:i'}}
+                        </div>
+                    </div>
+
+                </a>
+
+
+
+
+                {% endfor %} {% endif %}
+            </div>
+
+
+
+            <div class="container-btn-mostra-mais mb-5 mt-3">
+
+                <a href="/view-defesas/" class="btn btn-primary"><i class="fas fa-bars"></i> Ver todas</a>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</main>
+{% endblock %}
