@@ -1,9 +1,10 @@
+
 import os
-from django.http import HttpResponse
+from pyexpat.errors import messages
 from django.shortcuts import redirect, render
 from secao.models import Secao
 from subsecao.models import Subsecao
-
+from django.contrib import messages
 from upload.models import Arquivo
 from usuario.models import Usuario
 
@@ -11,24 +12,6 @@ from usuario.models import Usuario
 
 
 # Define que tipos de arquivos nossa aplicação aceita
-
-extensoes_permitidas = {
-
-    'imagens': [
-
-        'png',
-        'jpeg'
-        'svg'
-    ],
-    'documentos': [
-
-        'word',
-        'docx',
-        'pdf',
-        'txt'
-    ]
-}
-
 
 
 
@@ -39,69 +22,53 @@ def upload(request):
     secoes = Secao.objects.all().order_by('ordem')
     subsecoes = Subsecao.objects.all().order_by('ordem')
 
-    # usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+    usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-    # return render(request,'upload/index.html',{'arquivos':arquivos,
-    #                                             "secoes":secoes,
-    #                                             "usuario_logado":usuario_logado  
-    #                                           })
     return render(request,'upload/index.html',{'arquivos':arquivos,
                                                 "secoes":secoes,
-                                                "subsecoes":subsecoes
-                                               
+                                                "usuario_logado":usuario_logado,
+                                                "subsecoes":subsecoes  
                                               })
+   
 
 
 def salvar_arquivo(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    subsecoes = Subsecao.objects.all().order_by('ordem')
 
-    arquivo = str(request.FILES['arquivo'])
+    try:
+
+        arquivo = str(request.FILES['arquivo'])
+
+    except :
+
+        messages.add_message(request,messages.WARNING,"É necessário selecionar um arquivo")
+        return redirect('/upload/')
+
+        
+
+
     arquivo = str(request.FILES['arquivo']).split('.')
     nomeArquivo = arquivo[0]
     extensaoArquivo = arquivo[-1].lower()
+    
 
     
     usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
-    isSalvo = True
-
-
-    if( extensaoArquivo in extensoes_permitidas.get('imagens')):
-        
-        tipo_arquivo = 'imagem'
-
-       
-    elif ( extensaoArquivo in extensoes_permitidas.get('documentos') ):
-
-        tipo_arquivo = 'documento'
-
-    else :
-
-        tipo_arquivo = None
-
-
-
     
-    if tipo_arquivo != None:
+ 
+    try:
 
-        newdoc = Arquivo(nome = nomeArquivo, url = request.FILES['arquivo'],extensao = extensaoArquivo,tipo_arquivo = tipo_arquivo)
+        newdoc = Arquivo(nome = nomeArquivo, url = request.FILES['arquivo'],extensao = extensaoArquivo, usuario = usuario_logado)
         newdoc.save()
+        messages.add_message(request,messages.SUCCESS,"Upload realizado com sucesso")
 
-    else:
+    except: 
 
-        isSalvo = False
-      
+        messages.add_message(request,messages.WARNING,"Ocorreu um erro ao salvar o arquivo")
 
-    arquivos = Arquivo.objects.all()
-        
-    return render(request,'upload/index.html',{'arquivos':arquivos,
-                                                    'isSalvo': isSalvo,
-                                                    "secoes":secoes,
-                                                    'usuario_logado':usuario_logado,
-                                                    'subsecoes':subsecoes
-                                                    })
+   
 
+    return redirect('/upload/')
 
 
 def excluir_arquivo(request,id):
@@ -110,13 +77,22 @@ def excluir_arquivo(request,id):
         
         arquivo = Arquivo.objects.filter(id=id).first()
 
-        try:       
+        try:   
+
             os.unlink("./media/"+str(arquivo.url))
 
-        except OSError as e:
-             ...
+        except OSError:
+             
+            messages.add_message(request,messages.WARNING,"Arquivo não foi encontrado")
+        
+        try:
+            
+            arquivo.delete()
+            messages.add_message(request,messages.SUCCESS,"Arquivo foi excluido com sucesso")
 
-        arquivo.delete()
+        except:
+
+            messages.add_message(request,messages.WARNING,"Arquivo não pode ser excluido")
 
         return redirect('/upload/')
     

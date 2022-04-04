@@ -131,7 +131,7 @@
 
                 <thead>
                     <tr>
-                        <th class="text-center">Tipo</th>
+
                         <th class="text-center">Nome</th>
                         <th class="text-center">Data</th>
                         <th class="text-center">Usuário</th>
@@ -145,15 +145,6 @@
                     {% for arquivo in arquivos %}
 
                     <tr>
-                        <td style="text-align: center;">
-
-                            {% if arquivo.extensao == 'jpeg' or arquivo.extensao == 'png' %}
-                            <i class="fas fa-file-image" style="font-size: 24px;"></i> {% elif arquivo.extensao == 'pdf' %}
-
-                            <i class="fas fa-file-pdf" style="font-size: 24px;"></i> {% elif arquivo.extensao == 'docx' or arquivo.extensao == 'txt' %}
-                            <i class="fas fa-file-word" style="font-size: 24px;"></i> {% endif %}
-
-                        </td>
 
                         <td style="text-align: center;">
 
