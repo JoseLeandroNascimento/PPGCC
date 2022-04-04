@@ -6,6 +6,7 @@ class Secao(models.Model):
 
     titulo = models.CharField(
         
+        unique=True,
         max_length= 200,
         null = False,
         blank = False
@@ -20,7 +21,7 @@ class Secao(models.Model):
 
     )
 
-    usuario = models.OneToOneField(
+    usuario = models.ForeignKey(
         Usuario,
         on_delete=models.SET_NULL, 
         null = True

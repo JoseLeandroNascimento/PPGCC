@@ -1,9 +1,10 @@
+from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from secao.models import Secao
 from secao.icons import icons
 from subsecao.models import Subsecao
 from usuario.models import Usuario
-
+from django.contrib import messages
 
 def addSecao(request):
 
@@ -39,7 +40,11 @@ def salvarSecao(request):
         ordem = request.POST.get('ordem')
         icon = request.POST.get('icon')
         ativada = request.POST.get('ativada')
-        id_usuario = request.POST.get('id_usuario')
+
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+
+     
 
         secoes = Secao.objects.all()
 
@@ -53,9 +58,28 @@ def salvarSecao(request):
 
                 secao.save()
 
-        novaSecao = Secao(titulo=titulo, ordem=ordem,
-                          icon=icon, ativada=ativada)
-        novaSecao.save()
+        novaSecao = Secao(titulo=titulo, 
+                          ordem=ordem,
+                          icon=icon, 
+                          ativada=ativada,
+                          usuario=usuario_logado
+                      )
+
+        try:
+
+            novaSecao.save()
+            messages.add_message(request,messages.SUCCESS, "Seção criada com sucesso")
+
+        except IntegrityError:
+            
+            if Secao.objects.filter(titulo = titulo):
+
+                messages.add_message(request,messages.WARNING,"Já existe seção com mesmo nome")
+                redirect('/home/')
+
+        except:
+            messages.add_message(request,messages.WARNING,"A seção não pode ser criada")
+            redirect('/home/')
 
     return redirect('/home/')
 
@@ -178,10 +202,21 @@ def excluirSecao(request):
     if(request.method == 'POST'):
 
         id = request.POST.get('id')
-        print('passei')
+       
         secao = Secao.objects.get(id=id)
+        ordem = secao.ordem
 
         secao.delete()
+
+        secoes = Secao.objects.all()
+        ordem = 1
+        for secao in secoes:
+
+           
+            secao.ordem = ordem
+            secao.save()
+
+            ordem +=1
 
 
     return redirect('/home')

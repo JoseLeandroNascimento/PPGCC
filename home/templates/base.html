@@ -214,15 +214,13 @@
             </li>
 
             {% endblock %}
-            <li class="nav-item">
-                <a href="/logout/" class="nav-link">
-
-
-                    <i class="fas fa-reply"></i>
+            <li class="nav-item mb-5">
+                <a href="" class="nav-link" data-toggle="modal" data-target="#sair">
+                    <i class="nav-icon fas fa-reply"></i>
                     <span translate="no">Sair</span>
 
-                </a>
 
+                </a>
             </li>
             <!-- Nav Item - Pages Collapse Menu -->
 
@@ -305,23 +303,36 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+
+    <div class="modal" id="sair">
+        <div class="modal-dialog">
             <div class="modal-content">
+
+
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <h4 class="modal-title">Confirmação de saída</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p style="font-size: 20px">
+                        Tem certeza que deseja sair?
+                    </p>
+                </div>
+
+                <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+
+
+                    <a href="/logout/" class="btn btn-success">Sim</a>
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
                 </div>
+
             </div>
         </div>
+
     </div>
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -339,7 +350,7 @@
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
     <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
-    
+
 </body>
 
 </html>
