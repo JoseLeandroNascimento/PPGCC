@@ -1,4 +1,5 @@
 
+from unittest import result
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from noticias.models import Noticia
@@ -31,8 +32,18 @@ def noticias(request):
 
 def add_noticia(request):
 
+    lista_imagens = ['JPEG','PNG','PDF','SVG']
+    
     secoes = Secao.objects.all().order_by('ordem')
-    imagens = Arquivo.objects.filter(tipo_arquivo = 'imagem')
+
+    imagens = []
+    for tipo in lista_imagens:
+
+        result = Arquivo.objects.filter(extensao__icontains=tipo)
+        print(result)
+        if result:
+            imagens.extend(list(result))
+
     subsecoes = Subsecao.objects.all().order_by('ordem')
     
     try:
@@ -55,8 +66,37 @@ def salvar_noticia(request):
         previa = request.POST.get("previa")
         conteudo = request.POST.get("conteudo")
         img_id = request.POST.get('img_id')
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-        if(img_id == '-1'):
+        try:
+
+            arquivo = str(request.FILES['arquivo_upload'])
+
+            arquivo = str(request.POST.get('arquivo_upload')).split('.')
+            nomeArquivo = arquivo[0]
+            extensaoArquivo = arquivo[-1].lower()
+            
+            try:
+
+                newdoc = Arquivo(nome = nomeArquivo, url = request.POST.get('arquivo_upload'),extensao = extensaoArquivo, usuario = usuario_logado)
+                newdoc.save()
+                messages.add_message(request,messages.SUCCESS,"Upload realizado com sucesso")
+
+            except: 
+
+                messages.add_message(request,messages.WARNING,"Ocorreu um erro ao salvar o arquivo")
+
+        except :
+
+            messages.add_message(request,messages.WARNING,"É necessário selecionar um arquivo")
+            return redirect('/add_noticia/')
+
+      
+
+        
+
+    
+        if(img_id == '-1' or img_id == ''):
 
             messages.add_message(request, messages.WARNING,"É necessário fornecer uma imagem")
             return redirect("/noticias/")

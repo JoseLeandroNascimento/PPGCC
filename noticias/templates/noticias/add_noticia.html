@@ -44,18 +44,38 @@
                     <textarea name="previa" placeholder="Digite uma prévia do conteúdo da notícia" class="form-control" required></textarea>
                     <br>
                     <label>Imagem da Notícia</label>
-                    <select name="img_id" class="form-control">
 
-                        {% if imagens|length > 0 %}
-                            
-                            {% for imagem in imagens %}
-                                <option value="{{ imagem.id }}">{{imagem.nome}}</option>
-                            {% endfor %}
+                    <div class="row">
 
-                        {% else %}
-                            <option value="-1">Nenhuma imagem</option>
-                        {% endif %}
-                    </select>
+                        <div class="col-6">
+                            <div class="custom-file">
+                                <input type="file" name="arquivo_upload" class="form-control pt-1 text-center custom-file-input " id="file" />
+                                <label class="custom-file-label" for="customFile">Upload de arquivo</label>
+                            </div>
+                            <input type="hidden" name="id_usuario" value="">
+
+                        </div>
+
+
+
+                        <div class="col-6">
+
+                            <select name="img_id" class="form-control" title="Escolha uma imagem">
+                                <option value="">Carregar</option>
+                                {% if imagens|length > 0 %}
+                                    
+                                    {% for imagem in imagens %}
+                                        <option value="{{ imagem.id }}">{{imagem.nome}}</option>
+                                    {% endfor %}
+        
+                                {% else %}
+                                    <option value="-1">Nenhuma imagem</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+
 
 
 
