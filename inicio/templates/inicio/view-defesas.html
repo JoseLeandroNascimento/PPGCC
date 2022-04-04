@@ -1,4 +1,7 @@
-{% extends 'inicio/base_inicio.html' %} {% block menu-defesas %}
+{% extends 'inicio/base_inicio.html' %} {% load static %} {% block style %}
+
+<link rel="stylesheet" href="{% static 'css/style-defesas-lista.css' %}"> {% endblock %} {% block menu-defesas %}
+
 <li class="nav-item pt-2 pb-2 mr-1">
     <a class="nav-link text-white menu-ativado texto-menu" href="/view-defesas/">Defesas</a>
 </li>

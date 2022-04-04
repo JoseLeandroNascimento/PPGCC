@@ -1,4 +1,6 @@
-{% extends "inicio/base_inicio.html" %} {% block menu-home %}
+{% extends "inicio/base_inicio.html" %} {% load static %} {% block style %}
+
+<link rel="stylesheet" href="{% static 'css/style-defesas.css' %}"> {% endblock %} {% block menu-home %}
 <a class="nav-link text-white menu-ativado texto-menu" href="/">
 
     <i class="fas fa-home"></i> Página Inicial

@@ -1,4 +1,6 @@
-{% extends "inicio/base_inicio.html" %} {% block menu-noticias %}
+{% extends "inicio/base_inicio.html" %} {% load static %} {% block style %}
+
+<link rel="stylesheet" href="{% static 'css/style-noticia.css' %}"> {% endblock %} {% block menu-noticias %}
 <li class="nav-item pt-2 pb-2 mr-1">
     <a class="nav-link text-white menu-ativado texto-menu " href="/view-noticias/">Notícias</a>
 </li>
