@@ -1,6 +1,7 @@
 
 import os
 from pyexpat.errors import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from secao.models import Secao
 from subsecao.models import Subsecao
@@ -147,3 +148,19 @@ def buscarArquivo(request):
     return render(request,"upload/index.html",{'arquivos':arquivos,"secoes":secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
 
+def buscarImagens(request):
+
+    lista_extensao = ['JPEG','PNG','PDF','SVG','JPG']
+
+    lista_imagens = []
+
+    for extensao in lista_extensao:
+
+        arquivos = Arquivo.objects.filter(extensao__icontains=extensao)
+
+        for arq in arquivos:
+
+            lista_imagens.append({"id":arq.id,"nome":arq.nome, "url": str(arq.url)})
+
+
+    return JsonResponse(lista_imagens,safe=False)

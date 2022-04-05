@@ -32,7 +32,6 @@ def noticias(request):
 
 def add_noticia(request):
 
-    lista_imagens = ['JPEG','PNG','PDF','SVG']
     
     secoes = Secao.objects.all().order_by('ordem')
     subsecoes = Subsecao.objects.all().order_by('ordem')

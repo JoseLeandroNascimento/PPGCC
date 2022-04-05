@@ -12,6 +12,7 @@ urlpatterns = [
     path("excluir_arquivo/<int:id>/",excluir_arquivo, name="excluir_arquivo"),
     path("excluir_tudo/",excluir_tudo, name="excluir_tudo"),
     path("buscar_arquivo/",buscarArquivo, name="buscar_arquivo"),
+    path("buscar_imagens/",buscarImagens)
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
