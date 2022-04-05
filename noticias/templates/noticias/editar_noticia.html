@@ -41,27 +41,17 @@
                     <textarea name="previa" placeholder="Digite uma prévia do conteúdo da notícia" class="form-control" required>{{ noticia.previa }}</textarea>
                     <br>
                     <label>Imagem da Notícia</label>
-                    <select name="img_id" class="form-control">
+                    <div class="row">
 
-                        {% if imagens|length > 0 %}
-                            
-                            {% for imagem in imagens %}
+                        <div class="col">
+                            <div class="custom-file">
+                                <input type="file" name="arquivo_upload" class="form-control pt-1 text-center custom-file-input " id="file" accept="image/*">
+                                <label class="custom-file-label" for="customFile">Upload de arquivo</label>
+                            </div>
+                            <input type="hidden" name="id_usuario" value="">
 
-                                {% if noticia.img == imagem %}
-                               
-                                    <option value="{{ imagem.id }}" selected>{{imagem.nome}}</option>
-
-                                {% else %}
-                                    
-                                    <option value="{{ imagem.id }}">{{imagem.nome}}</option>
-                                
-                                    {% endif %}
-                            {% endfor %}
-
-                        {% else %}
-                            <option value="-1">Nenhuma imagem</option>
-                        {% endif %}
-                    </select>
+                        </div>
+                    </div>
 
 
 

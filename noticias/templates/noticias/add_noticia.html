@@ -47,31 +47,13 @@
 
                     <div class="row">
 
-                        <div class="col-6">
+                        <div class="col">
                             <div class="custom-file">
-                                <input type="file" name="arquivo_upload" class="form-control pt-1 text-center custom-file-input " id="file" />
+                                <input type="file" name="arquivo_upload" class="form-control pt-1 text-center custom-file-input " id="file" accept="image/*" required/>
                                 <label class="custom-file-label" for="customFile">Upload de arquivo</label>
                             </div>
                             <input type="hidden" name="id_usuario" value="">
 
-                        </div>
-
-
-
-                        <div class="col-6">
-
-                            <select name="img_id" class="form-control" title="Escolha uma imagem">
-                                <option value="">Carregar</option>
-                                {% if imagens|length > 0 %}
-                                    
-                                    {% for imagem in imagens %}
-                                        <option value="{{ imagem.id }}">{{imagem.nome}}</option>
-                                    {% endfor %}
-        
-                                {% else %}
-                                    <option value="-1">Nenhuma imagem</option>
-                                {% endif %}
-                            </select>
                         </div>
                     </div>
 

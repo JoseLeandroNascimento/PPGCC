@@ -35,15 +35,6 @@ def add_noticia(request):
     lista_imagens = ['JPEG','PNG','PDF','SVG']
     
     secoes = Secao.objects.all().order_by('ordem')
-
-    imagens = []
-    for tipo in lista_imagens:
-
-        result = Arquivo.objects.filter(extensao__icontains=tipo)
-        print(result)
-        if result:
-            imagens.extend(list(result))
-
     subsecoes = Subsecao.objects.all().order_by('ordem')
     
     try:
@@ -55,7 +46,7 @@ def add_noticia(request):
 
         usuario_logado = None
 
-    return render(request, "noticias/add_noticia.html", {"subsecoes":subsecoes,"secoes": secoes, 'usuario_logado': usuario_logado, 'imagens': imagens})
+    return render(request, "noticias/add_noticia.html", {"subsecoes":subsecoes,"secoes": secoes, 'usuario_logado': usuario_logado})
 
 
 def salvar_noticia(request):
@@ -65,68 +56,47 @@ def salvar_noticia(request):
         titulo = request.POST.get("titulo")
         previa = request.POST.get("previa")
         conteudo = request.POST.get("conteudo")
-        img_id = request.POST.get('img_id')
         usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
+        # Esse try verifica se ocorreu tudo certo com o upload do arquivo ou se o usuário selecionou algum
         try:
 
             arquivo = str(request.FILES['arquivo_upload'])
-
-            arquivo = str(request.POST.get('arquivo_upload')).split('.')
-            nomeArquivo = arquivo[0]
-            extensaoArquivo = arquivo[-1].lower()
-            
-            try:
-
-                newdoc = Arquivo(nome = nomeArquivo, url = request.POST.get('arquivo_upload'),extensao = extensaoArquivo, usuario = usuario_logado)
-                newdoc.save()
-                messages.add_message(request,messages.SUCCESS,"Upload realizado com sucesso")
-
-            except: 
-
-                messages.add_message(request,messages.WARNING,"Ocorreu um erro ao salvar o arquivo")
-
-        except :
+        
+        except:
 
             messages.add_message(request,messages.WARNING,"É necessário selecionar um arquivo")
             return redirect('/add_noticia/')
 
-      
-
+       
+        arquivo = str(request.FILES['arquivo_upload']).split('.')
+        nomeArquivo = arquivo[0]
+        extensaoArquivo = arquivo[-1].lower()
         
+        try:
+            
 
-    
-        if(img_id == '-1' or img_id == ''):
+            newdoc = Arquivo(nome = nomeArquivo, url = request.FILES['arquivo_upload'],extensao = extensaoArquivo, usuario = usuario_logado)
+            newdoc.save()
+            img = newdoc
 
-            messages.add_message(request, messages.WARNING,"É necessário fornecer uma imagem")
-            return redirect("/noticias/")
+        except:
 
-        else:
+            messages.add_message(request,messages.WARNING,"Ocorreu um erro ao salvar o arquivo")
+            return redirect('/add_noticia/')
 
-            img = Arquivo.objects.get(id = img_id )
+       
+        novaNoticia = Noticia(titulo= titulo, previa = previa, conteudo=conteudo, img= img, usuario = usuario_logado)
+        
+        try:
+            
+            novaNoticia.save()
+            messages.add_message(request,messages.SUCCESS,"Notícia publicada com sucesso")
 
-            try:
-                                
-                usuario = Usuario.objects.get(
-                id=request.session.get('id_usuario'))
-                messages.add_message(request,messages.SUCCESS,"Notícia publicada com sucesso")
-            except:
+        except IntegrityError:
 
-                usuario = None
-
-            novaNoticia = Noticia(titulo= titulo, previa = previa, conteudo=conteudo, img= img, usuario = usuario)
-
-            try:
-                novaNoticia.save()
-
-            except IntegrityError:
-
-                messages.add_message(request, messages.WARNING,
-                """Houve um erro ao tentar salvar a noticia, o motivo pode ser um desses:
-                    <ul>
-                        <li>Não foi informado uma imagem</li>
-                    </ul>
-                """)
+            messages.add_message(request, messages.WARNING,"Ocorreu um erro ao publicar a notícia")
+            return redirect('/noticias/')
 
 
 
@@ -142,12 +112,12 @@ def excluir_noticia(request):
             id = request.POST.get("id_noticia")
             noticia = Noticia.objects.filter(id=id).first()
             noticia.delete()
-            messages.add_message(request, messages.WARNING,"Notícia deletada com sucesso")
+            messages.add_message(request, messages.SUCCESS,"Notícia deletada com sucesso")
 
         
         except IntegrityError:
             
-            messages.add_message(request, messages.ERROR,"Noticia não pode ser deletada")
+            messages.add_message(request, messages.WARNING,"Noticia não pode ser deletada")
 
 
     return redirect("/noticias/")
@@ -156,11 +126,9 @@ def excluir_noticia(request):
 def editar_noticia(request):
 
     secoes = Secao.objects.all().order_by('ordem')
-    imagens = Arquivo.objects.filter(tipo_arquivo = 'imagem')
     subsecoes = Subsecao.objects.all().order_by('ordem')
 
     if(request.method == "POST"):
-
 
 
         try:
@@ -174,7 +142,7 @@ def editar_noticia(request):
 
             usuario_logado = None
 
-        return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,'imagens':imagens,"subsecoes":subsecoes})
+        return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})
 
 
 def update_noticia(request):
@@ -185,9 +153,36 @@ def update_noticia(request):
         previa = request.POST.get("previa")
         conteudo = request.POST.get("conteudo")
         id_usuario = request.POST.get("id_usuario")
-        img_id = request.POST.get('img_id')
+      
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
-        img = Arquivo.objects.get(id = img_id)
+        try:
+
+            arquivo = str(request.FILES['arquivo_upload'])
+
+            arquivo = str(request.FILES['arquivo_upload']).split('.')
+            nomeArquivo = arquivo[0]
+            extensaoArquivo = arquivo[-1].lower()
+            
+            try:
+                
+
+                newdoc = Arquivo(nome = nomeArquivo, url = request.FILES['arquivo_upload'],extensao = extensaoArquivo, usuario = usuario_logado)
+                newdoc.save()
+                img = newdoc
+
+            except:
+
+                messages.add_message(request,messages.WARNING,"Ocorreu um erro ao salvar o arquivo")
+                return redirect('/add_noticia/')
+        except:
+
+
+            img = Noticia.objects.get(id=id_noticia).img
+
+       
+        
+
         noticia = Noticia.objects.filter(id=id_noticia).first()
         noticia.titulo = titulo
         noticia.previa = previa
