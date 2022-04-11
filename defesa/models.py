@@ -1,4 +1,7 @@
+from pyexpat import model
 from django.db import models
+
+from usuario.models import Usuario
 
 
 class Defesa(models.Model):
@@ -34,6 +37,13 @@ class Defesa(models.Model):
 
     data_criacao =  models.DateTimeField(
         auto_now=True
+    )
+
+    usuario = models.ForeignKey(
+
+        Usuario,
+        null = True,
+        on_delete=models.SET_NULL
     )
 
 

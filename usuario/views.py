@@ -1,3 +1,4 @@
+
 from xml.sax.handler import property_interning_dict
 from django.shortcuts import redirect, render
 from secao.models import Secao
@@ -5,24 +6,36 @@ from django.db.models import Q
 from subsecao.models import Subsecao
 from usuario.models import Usuario
 from secao.models import Secao
+from django.contrib import messages
 
 # Create your views here.
 
 
 def usuario(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    usuarios = Usuario.objects.all()
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
 
     try:
 
 
         usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
+        if usuario_logado.permissao == 2:
+
+            secoes = Secao.objects.all().order_by('ordem')
+            usuarios = Usuario.objects.all()
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
+        else:
+            
+            messages.add_message(request,messages.WARNING,"Usuário tem acesso a esse recurso")
+            return redirect("/home/")
+
     except :
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/home/")
+
 
     
     return render(request, "usuario/index.html", {"secoes": secoes, "usuarios": usuarios, 'usuario_logado': usuario_logado,'subsecoes':subsecoes})
@@ -40,7 +53,9 @@ def cadastro(request):
 
     except :
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/home/")
+
 
 
     return render(request, "usuario/cadastro.html", {'secoes': secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
@@ -51,6 +66,21 @@ def cadastro(request):
 def criar_usuario(request):
 
     if request.method == "POST":
+
+        try:
+
+
+            usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+            if usuario_logado.permissao != 2:
+
+                messages.add_message(request,messages.WARNING,"Usuário não tem acesso a esse recurso")
+                return redirect("/home/")
+
+        except :
+
+            messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+            return redirect("/home/")
 
         usuario_data = dict(request.POST)
 
@@ -73,7 +103,7 @@ def criar_usuario(request):
         try:
 
             listaSecoes = usuario_data["lista[]"]
-
+           
             for idSecao in listaSecoes:
 
                 secao = Secao.objects.get(id=idSecao)
@@ -121,9 +151,15 @@ def buscarUsuario(request):
 
         usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
+        if usuario_logado.permissao != 2:
+
+            messages.add_message(request,messages.WARNING,"Usuário não tem acesso a esse recurso")
+            return redirect("/home/")
+
     except :
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/home/")
 
     return render(request, "usuario/index.html", {'usuarios': usuarios, "secoes": secoes,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 
@@ -149,9 +185,15 @@ def editarUsuario(request):
 
         usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
+        if(usuario_logado.permissao != 2):
+
+            messages.add_message(request,messages.WARNING,"Usuário não tem acesso a esse recurso")
+            return redirect("/home/")
+
     except :
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/home/")
 
     return render(request, "usuario/editarUsuario.html", {'secoes': secoes, 'usuario': usuario, "secoes_permitidas": secoes_permitidas,'usuario_logado':usuario_logado,'subsecoes':subsecoes})
 

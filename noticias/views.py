@@ -14,18 +14,29 @@ from django.contrib import messages
 
 def noticias(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    noticias = Noticia.objects.all()
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+
     
     try:
 
         usuario_logado = Usuario.objects.get(
             id=request.session.get('id_usuario'))
 
+        if usuario_logado.permissao == 2:
+
+            secoes = Secao.objects.all().order_by('ordem')
+            noticias = Noticia.objects.all()
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
+        else:
+
+            secoes = Secao.objects.filter(usuarios = usuario_logado).order_by('ordem')
+            noticias = Noticia.objects.filter(usuario=usuario_logado)
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
     except:
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/login/")
 
     return render(request, "noticias/index.html", {"noticias": noticias, "secoes": secoes, 'usuario_logado': usuario_logado,'subsecoes':subsecoes})
 
@@ -41,9 +52,22 @@ def add_noticia(request):
         usuario_logado = Usuario.objects.get(
             id=request.session.get('id_usuario'))
 
+        if usuario_logado.permissao == 2:
+
+            secoes = Secao.objects.all().order_by('ordem')
+           
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
+        else:
+
+            secoes = Secao.objects.filter(usuarios = usuario_logado).order_by('ordem')
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
+
     except:
 
-        usuario_logado = None
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/login/")
 
     return render(request, "noticias/add_noticia.html", {"subsecoes":subsecoes,"secoes": secoes, 'usuario_logado': usuario_logado})
 
@@ -124,8 +148,7 @@ def excluir_noticia(request):
 
 def editar_noticia(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
 
     if(request.method == "POST"):
 
@@ -137,9 +160,20 @@ def editar_noticia(request):
             usuario_logado = Usuario.objects.get(
                 id=request.session.get('id_usuario'))
 
+            if usuario_logado.permissao == 2:
+
+                secoes = Secao.objects.all().order_by('ordem')
+                subsecoes = Subsecao.objects.all().order_by('ordem')
+
+            else:
+
+                secoes = Secao.objects.filter(usuario=usuario_logado).order_by('ordem')
+                subsecoes = Subsecao.objects.all().order_by('ordem')
+
         except:
 
-            usuario_logado = None
+            messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+            return redirect("/login/")
 
         return render(request, "noticias/editar_noticia.html", {"noticia": noticia, "secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})
 
@@ -203,22 +237,33 @@ def update_noticia(request):
 
 def buscarNoticia(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+    
 
     if(request.method == 'POST'):
 
         valor_pesquisa = request.POST.get('valor_pesquisa')
 
-        noticias = Noticia.objects.all().filter(titulo__icontains=valor_pesquisa)
+        
 
-    try:
+        try:
 
-        usuario_logado = Usuario.objects.get(
-            id=request.session.get('id_usuario'))
+            usuario_logado = Usuario.objects.get(
+                id=request.session.get('id_usuario'))
 
-    except:
+            if usuario_logado.permissao == 2:
 
-        usuario_logado = None
+                secoes = Secao.objects.all().order_by('ordem')
+                subsecoes = Subsecao.objects.all().order_by('ordem')
+                noticias = Noticia.objects.all().filter(titulo__icontains=valor_pesquisa)
+
+            else:
+
+                secoes = Secao.objects.filter(usuario=usuario_logado).order_by('ordem')
+                subsecoes = Subsecao.objects.all().order_by('ordem')
+                noticias = Noticia.objects.all().filter(titulo__icontains=valor_pesquisa).filter(usuario=usuario_logado)
+
+        except:
+
+            usuario_logado = None
 
     return render(request, "noticias/index.html", {'noticias':noticias,"secoes":secoes,'usuario_logado':usuario_logado,"subsecoes":subsecoes})

@@ -44,8 +44,6 @@ def salvarSecao(request):
         usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
 
 
-     
-
         secoes = Secao.objects.all()
 
         for secao in secoes:

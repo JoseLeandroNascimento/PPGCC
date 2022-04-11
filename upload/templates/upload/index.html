@@ -133,31 +133,31 @@
 
                 <tbody class="arquivos-table">
 
-                    {% for arquivo in arquivos %}
+                    {% for dado in arquivos %}
 
                     <tr>
 
                         <td style="text-align: center;">
 
-                            {{ arquivo.nome | slice:"0:45" }}
+                            {{ dado.arquivo.nome | slice:"0:45" }}
 
                         </td>
 
                         <td>
-                            <i class="far fa-calendar-alt" translate="no"> {{ arquivo.data|date:'d/m/Y' }}</i>
+                            <i class="far fa-calendar-alt" translate="no"> {{ dado.arquivo.data|date:'d/m/Y' }}</i>
                             <br>
-                            <i class="far fa-clock" translate="no"> {{ arquivo.data|date:'H:i' }} </i>
+                            <i class="far fa-clock" translate="no"> {{ dado.arquivo.data|date:'H:i' }} </i>
                         </td>
                         <td style="text-align: center;"> leandro@gmail.com</td>
                         <td style="text-align: center;">
-                            <a href="../media/{{ arquivo.url }}" title="Baixar arquivo" class="btn btn-success" download>
+                            <a href="../media/{{ dado.arquivo.url }}" title="Baixar arquivo" class="btn btn-success" download>
                                 <i class="fas fa-download"></i>
                             </a>
-                            <button class="btn btn-info ml-2" title="Vinculação do arquivo" data-toggle="modal" data-target="#modalUtilizado{{ arquivo.id }}">
+                            <button class="btn btn-info ml-2" title="Vinculação do arquivo" data-toggle="modal" data-target="#modalUtilizado{{ dado.arquivo.id }}">
                                 <i class="fas fa-link"></i>
                             </button>
 
-                            <div class="modal" id="modalUtilizado{{ arquivo.id }}">
+                            <div class="modal" id="modalUtilizado{{ dado.arquivo.id }}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 
@@ -175,11 +175,11 @@
                                             <br>
 
 
-                                            <div id="accordion{{arquivo.id}}">
+                                            <div id="accordion{{dado.arquivo.id}}">
 
 
                                                 <div class="card">
-                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseOne{{arquivo.id}}" style="cursor: pointer;">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseOne{{dado.arquivo.id}}" style="cursor: pointer;">
                                                         <div class="row">
                                                             <div class="col-12">
 
@@ -189,16 +189,20 @@
                                                         </div>
 
                                                     </div>
-                                                    <div id="collapseOne{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                    <div id="collapseOne{{ dado.arquivo.id }}" class="collapse" data-parent="#accordion{{ dado.arquivo.id }}">
                                                         <div class="card-body">
                                                             <!-- Faz um for aqui -->
-                                                            <form action="./editarNoticias.php" method="post">
-                                                                <input type="hidden" name="id" value="<?= $noticia['id'] ?>">
-                                                                <button class="btn">
 
+                                                            {% for noticia in dado.noticias %}
+                                                            <form action="/editar_noticia/" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="id_noticia" value="{{noticia.id}}">
+                                                                <button class="btn">
+                                                                    {{noticia.titulo}}
                                                                 </button>
 
                                                             </form>
+                                                            {% endfor %}
 
                                                         </div>
                                                     </div>
@@ -206,7 +210,7 @@
 
 
                                                 <div class="card">
-                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTwo{{ arquivo.id }}" style="cursor: pointer;">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTwo{{ dado.arquivo.id }}" style="cursor: pointer;">
 
                                                         <div class="row">
                                                             <div class="col-12">
@@ -217,23 +221,27 @@
                                                         </div>
 
                                                     </div>
-                                                    <div id="collapseTwo{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                    <div id="collapseTwo{{ dado.arquivo.id }}" class="collapse" data-parent="#accordion{{ dado.arquivo.id }}">
                                                         <div class="card-body">
 
-                                                            <form action="./editarDefesas.php" method="post">
-                                                                <input type="hidden" name="defesa_id" value="<?= $defesa['id'] ?>">
-                                                                <button class="btn">
+                                                            {% for defesa in dado.defesas %}
 
-                                                                </button>
+                                                            <form action="/editarDefesa/" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="defesa_id" value="{{defesa.id}}">
+                                                                <button class="btn">
+                                                                    {{defesa.titulo}}
+                                                                    </button>
 
                                                             </form>
 
+                                                            {% endfor %}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="card">
-                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTree{{ arquivo.id }}" style="cursor: pointer;">
+                                                    <div class="card-header card-link bg-info" data-toggle="collapse" href="#collapseTree{{ dado.arquivo.id }}" style="cursor: pointer;">
 
                                                         <div class="row">
                                                             <div class="col-12">
@@ -245,18 +253,19 @@
                                                         </div>
 
                                                     </div>
-                                                    <div id="collapseTree{{ arquivo.id }}" class="collapse" data-parent="#accordion{{ arquivo.id }}">
+                                                    <div id="collapseTree{{ dado.arquivo.id }}" class="collapse" data-parent="#accordion{{ dado.arquivo.id }}">
                                                         <div class="card-body">
 
-
-                                                            <form action="./editarSubsecao.php" method="post">
-                                                                <input type="hidden" name="subsecao" value="<?= $subsecao['id'] ?>">
+                                                            {% for subsecao in dado.subsecoes %}
+                                                            <form action="/subsecao-editar/" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="subsecao" value="{{subsecao.id}}">
                                                                 <button class="btn">
-
+                                                                    {{subsecao.titulo}}
                                                                 </button>
 
                                                             </form>
-
+                                                            {% endfor %}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -281,11 +290,11 @@
                             </div>
 
 
-                            <button class="btn btn-outline-danger ml-2" title="Excluir arquivo" data-toggle="modal" data-target="#modalDelete{{ arquivo.id }}">
+                            <button class="btn btn-outline-danger ml-2" title="Excluir arquivo" data-toggle="modal" data-target="#modalDelete{{ dado.arquivo.id }}">
                                 <i class="fas fa-trash"></i>
                             </button>
 
-                            <div class="modal" id="modalDelete{{ arquivo.id }}">
+                            <div class="modal" id="modalDelete{{ dado.arquivo.id }}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 
@@ -306,7 +315,7 @@
                                         <!-- Modal footer -->
                                         <div class="modal-footer">
 
-                                            <a href='{% url "upload:excluir_arquivo" id=arquivo.id %}' class="btn btn-success">Sim</a>
+                                            <a href='{% url "upload:excluir_arquivo" id=dado.arquivo.id %}' class="btn btn-success">Sim</a>
 
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">Não</button>
 
