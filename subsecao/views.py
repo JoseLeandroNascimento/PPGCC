@@ -9,13 +9,31 @@ from usuario.models import Usuario
 
 def cadastroSubsecao(request, id_secao):
 
-    secao = Secao.objects.get(id=id_secao)
-    subsecoes = Subsecao.objects.filter(secao=secao)
-    cont_subsecoes = list(range(1, len(subsecoes)+2))
-    max_ordem = len(subsecoes)+1
-    usuario_logado = request.session.get('id_usuario')
-    secoes = Secao.objects.all().order_by('ordem')
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+   
+
+    try:
+
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+        if usuario_logado.permissao == 2:
+
+            secoes = Secao.objects.all().order_by('ordem')
+
+        else:
+
+            secoes = Secao.objects.filter(usuarios = usuario_logado).order_by('ordem')
+
+        secao = Secao.objects.get(id=id_secao)
+        subsecoes = Subsecao.objects.all().order_by('ordem')
+        cont_subsecoes = list(range(1, len(subsecoes)+2))
+        max_ordem = len(subsecoes)+1
+        
+    except IndexError:
+
+        messages.add_message(request,messages.WARNING, "Usuário não está autenticado")
+        return redirect("/login/")
+
+   
 
     return render(request, 'subsecao/index.html', {
         "id_secao": id_secao, 
@@ -76,9 +94,23 @@ def subsecao(request, id_subsecao):
     sub = Subsecao.objects.get(id=id_subsecao)
     subsecoes = Subsecao.objects.all().order_by('ordem')
     conteudo = sub.conteudo
-    secoes = Secao.objects.all().order_by('ordem')
+    
 
-    usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+    try:
+
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+        if usuario_logado.permissao == 2:
+
+            secoes = Secao.objects.all().order_by('ordem')
+        else:
+
+            secoes = Secao.objects.filter(usuarios=usuario_logado).order_by('ordem')
+
+    except IndexError:
+
+        messages.add_message(request, messages.WARNING, "Usuário não está autenticado")
+        return redirect("/login/")
 
     return render(request, 'subsecao/view.html', {
 
@@ -94,11 +126,32 @@ def subsecaoEditar(request):
 
     if request.method == 'POST':
 
-        sub = Subsecao.objects.get(id=request.POST.get('subsecao'))
-        secoes = Secao.objects.all().order_by('ordem')
-        subsecoes = Subsecao.objects.all().order_by('ordem')
-        usuario_logado = Usuario.objects.get(
-            id=request.session.get('id_usuario'))
+        try:
+
+            sub = Subsecao.objects.get(id=request.POST.get('subsecao'))
+            subsecoes = Subsecao.objects.all().order_by('ordem')
+
+            usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+            if usuario_logado.permissao == 2:
+
+                secoes = Secao.objects.all().order_by('ordem')
+
+            else:
+                
+                secoes = Secao.objects.filter(usuarios = usuario_logado).order_by('ordem')
+
+
+            if sub.usuarios != usuario_logado:
+
+                messages.add_message(request,messages.WARNING,"Usuário não tem acesso a esse recurso")
+                return redirect("/home/")
+
+
+        except IndexError:
+
+            messages.add_message(request,messages.WARNING, "Usuário não está autenticado")
+            return redirect("/login/")
 
         return render(request, 'subsecao/editar.html', {
             'subsecao': sub,
@@ -115,14 +168,32 @@ def configurar(request):
 
         subsecao = Subsecao.objects.get(id=request.POST.get('id_subsecao'))
 
-        subsecoes = Subsecao.objects.filter(secao=subsecao.secao)
-        cont_subsecoes = list(range(1, len(subsecoes)+1))
-        max_ordem = len(subsecoes)
-        usuario_logado = Usuario.objects.get(
-            id=request.session.get('id_usuario'))
-        secoes = Secao.objects.all().order_by('ordem')
-        subsecoes = Subsecao.objects.filter(
+
+      
+        
+        try:
+
+            
+            usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+            if usuario_logado.permissao == 2:
+
+                secoes = Secao.objects.all().order_by('ordem')
+
+            else:
+
+                secoes = Secao.objects.filter(usuarios=usuario_logado).order_by('ordem')
+
+            subsecoes = Subsecao.objects.filter(
             secao=subsecao.secao).order_by('ordem')
+            cont_subsecoes = list(range(1, len(subsecoes)+1))
+            max_ordem = len(subsecoes)
+        
+        except IndexError:
+
+            messages.add_message(request, messages.WARNING, "Usuário não está autenticado")
+            return redirect("/login/")
+       
 
         return render(request, 'subsecao/configurar.html', {
             "subsecoes": subsecoes,

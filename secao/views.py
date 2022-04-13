@@ -1,3 +1,4 @@
+from email import message
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from secao.models import Secao
@@ -8,13 +9,33 @@ from django.contrib import messages
 
 def addSecao(request):
 
-    secoes = Secao.objects.all().order_by('ordem')
-    subsecoes = Subsecao.objects.all().order_by('ordem')
+   
     
-    num_ordem = len(secoes)
-    ordens = list(range(1, num_ordem+2))
 
-    usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+    try:
+
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+        
+        if usuario_logado.permissao != 2:
+
+            messages.add_message(request,messages.WARNING,"Usuário não tem acesso a esse recurso")
+            return redirect("/home/")
+    
+        secoes = Secao.objects.all().order_by('ordem')
+        num_ordem = len(secoes)
+
+        secoes = Secao.objects.all().order_by('ordem')
+
+
+        subsecoes = Subsecao.objects.all().order_by('ordem')
+        
+        ordens = list(range(1, num_ordem+2))
+
+    except IndexError:
+
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect('/login/')
     icon_secao = list(icons.values())[0]
     icon_secao_chave = list(icons.keys())[0]
 
@@ -63,8 +84,12 @@ def salvarSecao(request):
                           usuario=usuario_logado
                       )
 
+        
+
         try:
 
+            novaSecao.save()
+            novaSecao.usuarios.add(usuario_logado)
             novaSecao.save()
             messages.add_message(request,messages.SUCCESS, "Seção criada com sucesso")
 
@@ -83,6 +108,19 @@ def salvarSecao(request):
 
 
 def editarSecao(request, id):
+
+    try:
+        
+        usuario_logado = Usuario.objects.get(id=request.session.get('id_usuario'))
+
+        if usuario_logado.permissao != 2:
+            messages.add_message(request,messages.WARNING, "Usuário não tem acesso a esse recurso")
+            return redirect("/home/")
+
+    except IndexError:
+
+        messages.add_message(request,messages.WARNING,"Usuário não está autenticado")
+        return redirect("/login/")
 
     secoes = Secao.objects.all().order_by('ordem')
     subsecoes = Subsecao.objects.all().order_by('ordem')
